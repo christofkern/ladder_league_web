@@ -67,3 +67,15 @@
     font-size: 40px;
     padding: 20px 20px
 }
+
+
+.result {
+    font-family: 'Rubik-Bold';
+    font-size: 60px;
+    margin-bottom: 10px;            
+}
+.time {
+    font-family: 'Rubik-Bold';
+    font-size: 50px;
+
+}
