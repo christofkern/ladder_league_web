@@ -208,4 +208,4 @@ def custom_font_route(filename):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=35065)
+    app.run(host='0.0.0.0', port=35065, debug=True)
