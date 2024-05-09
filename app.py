@@ -40,7 +40,7 @@ def recheck_data():
         if (final_time != 1e8):
             position = get_position(race_data[1], final_time)
             if (position != 0):
-                write_final_time(spreadsheet_id, runner, str(final_time), runners_values[int(runner)][1], position, runners_values[int(runner)][18])
+                write_final_time(spreadsheet_id, runners_values[int(runner)][1] + 1, str(final_time), runners_values[int(runner)][1], position, runners_values[int(runner)][18])
 
     return jsonify({'runners' : runners_values})
 
