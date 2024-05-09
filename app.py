@@ -27,13 +27,20 @@ def recheck_data():
     if spreadsheet_id is None or spreadsheet_id == '':
         return render_template('error.html', message='Please provide a valid spreadsheet_id')
 
-    _, runners_values = get_race_information(spreadsheet_id)
+
+    race_data, runners_values = get_race_information(spreadsheet_id)
 
     #update data from therun (sob)
     for idx, runner in enumerate(runners_values):
         rungg = runner[4]        
         sob = get_runner_sob(rungg)
         write_sob(spreadsheet_id, idx, sob)
+
+    final_time = get_final_time(race_data[1], rungg)
+    if (final_time != 1e8):
+        position = get_position(race_data[1], final_time)
+        if (position != 0):
+            write_final_time(spreadsheet_id, runner, str(final_time), runners_values[int(runner)][1], position, runners_values[int(runner)][18])
 
     return jsonify({'runners' : runners_values})
 
