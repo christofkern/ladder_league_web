@@ -58,7 +58,7 @@ def write_final_time(spreadsheet_id, index, value, seed, position, tournamen_rec
     if not current_value:
         current_value = [value]  # If no current value, set it to the new time
     else:
-        current_value.append(value)
+        current_value = current_value[:-1] + value + current_value[-1]
 
     # Prepare the update request
     body = {
