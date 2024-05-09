@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rotating Info</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+    
+
+    <body>
+        <div 
+            id="rotating-field">
+        </div>  
+    </body>
+
+    <script>
+        let layouts = {{layout_files | tojson}};
+        let currentLayout = 0;
+    
+        function fetchAndDisplayLayout() {
+            fetch('rotating_layouts/' + layouts[currentLayout]) 
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('rotating-field').innerHTML = html;
+                currentLayout = (currentLayout + 1) % layouts.length; // Move to the next layout
+                setTimeout(fetchAndDisplayLayout, {{interval}}); // Call the function again after 15 seconds
+            })
+            .catch(error => {
+                console.error('Error fetching HTML:', error);
+            });
+        }
+    
+        fetchAndDisplayLayout(); // Start the process
+    </script>
+    
+</html>
