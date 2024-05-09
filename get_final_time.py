@@ -87,7 +87,7 @@ def get_average_time(final_time, seed):
     #Retrieve current value from the spreadsheet
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheet_id, range=RANGE_NAME).execute()
-    current_value =  ast.literal_eval(result.get('values', [])[0])
+    current_value =  result.get('values', [])[0][0]
     all_times = [final_time]
     for value in current_value:
         all_times.append(parse_time_to_milliseconds(value))
