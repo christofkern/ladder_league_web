@@ -209,6 +209,7 @@ def post_race_info():
         best_time = ""
         average_time = ""
         final_time = "Awaiting Data"
+        record_string = ""
 
     return render_template('post_race_stats.html',  final_time = final_time, final_time_icon = final_time_icon, record = record_string, best_time = best_time, average_time = average_time )
 
