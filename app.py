@@ -183,7 +183,7 @@ def post_race_info():
 
     record = runners_values[int(runner)][18]
     best_time = get_best_time(final_time, runners_values[int(runner)][1])
-    average_time = get_best_time(final_time, runners_values[int(runner)][1])
+    average_time = get_average_time(final_time, runners_values[int(runner)][1])
 
     return render_template('post_race_stats.html',  final_time = format_milliseconds(final_time), final_time_icon = final_time_icon, record = record, best_time = best_time, average_time = average_time )
 

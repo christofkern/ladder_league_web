@@ -1,7 +1,6 @@
 import requests
 from googleapiclient.discovery import build
 from get_google_credentials import get_credentials
-import ast
 
 def format_milliseconds(total_milliseconds):
     if isinstance(total_milliseconds, str):
