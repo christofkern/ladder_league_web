@@ -78,7 +78,7 @@ def get_best_time(final_time, seed):
 
 def get_average_time(final_time, seed):
     spreadsheet_id = "1i4DUK9SuWknyS1QW2MXGchRZ4s1cu44CSrNRUP03tvY"
-    RANGE_NAME = RANGE_NAME = f'Runners!I{seed+1}'
+    RANGE_NAME = RANGE_NAME = f'Runners!I{int(seed)+1}'
 
     creds = get_credentials()
     service = build('sheets', 'v4', credentials=creds)
