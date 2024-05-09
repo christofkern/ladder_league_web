@@ -19,7 +19,7 @@ def index():
         return render_template('error.html', message='Please provide a valid spreadsheet_id')
     _, runners_values = get_race_information(spreadsheet_id)
     print(runners_values)
-    return render_template('rotating_info.html', interval = 2000, spreadsheet_id = spreadsheet_id, runner_data = runners_values)
+    return render_template('rotating_info.html', interval = 6000, spreadsheet_id = spreadsheet_id, runner_data = runners_values)
 
 @app.route('/recheck_data')
 def recheck_data():
