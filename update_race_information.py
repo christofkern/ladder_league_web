@@ -3,7 +3,7 @@ from get_google_credentials import get_credentials
 
 
 def write_sob(spreadsheet_id, index, value):
-    RANGE_NAME = f'Runners!Q{int(index)index+2}'  # Specify the cell to write to
+    RANGE_NAME = f'Runners!Q{int(index)+2}'  # Specify the cell to write to
 
     creds = get_credentials()
     service = build('sheets', 'v4', credentials=creds)
