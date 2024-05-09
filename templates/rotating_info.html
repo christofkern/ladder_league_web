@@ -37,6 +37,8 @@
         let currentLayout = 0;
         let runners = {{runner_data | tojson}};
         let s_id = "{{spreadsheet_id}}";
+
+        console.log(runners)
     
         function updateData() {
             fetch('/recheck_data?spreadsheet_id=' + encodeURIComponent(s_id))
