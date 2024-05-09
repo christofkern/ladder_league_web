@@ -1,5 +1,6 @@
 from googleapiclient.discovery import build
 from get_google_credentials import get_credentials
+from get_final_time import format_milliseconds
 
 
 def write_sob(spreadsheet_id, index, value):
@@ -30,9 +31,10 @@ def write_final_time(spreadsheet_id, index, value, seed, position, tournamen_rec
 
     # Prepare the request body
     request_body = {
-        'values': [[value]]  # Provide the value to be written in a 2D array
+        'values': [[format_milliseconds(value)]]  # Provide the value to be written in a 2D array
     }
     print(spreadsheet_id)
+    print(value)
     # Call the Sheets API to update the cell value
     service.spreadsheets().values().update(
         spreadsheetId=spreadsheet_id,
