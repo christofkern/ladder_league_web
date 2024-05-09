@@ -10,7 +10,8 @@ def get_race_information(spreadsheet_id):
     service = build('sheets', 'v4', credentials=creds)
 
     race_sheet = service.spreadsheets()
-    print(spreadsheet_id)
+    if (spreadsheet_id == ''):
+        return None,None 
     race_result = race_sheet.values().get(spreadsheetId=spreadsheet_id,
                                 range=RACE_RANGE_NAME).execute()
     race_values = race_result.get('values', [])

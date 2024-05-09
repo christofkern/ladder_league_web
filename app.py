@@ -24,7 +24,7 @@ def index():
 @app.route('/recheck_data')
 def recheck_data():
     spreadsheet_id = request.args.get('spreadsheet_id')
-    if spreadsheet_id is None:
+    if spreadsheet_id is None or spreadsheet_id == '':
         return render_template('error.html', message='Please provide a valid spreadsheet_id')
 
     _, runners_values = get_race_information(spreadsheet_id)
