@@ -41,7 +41,7 @@
         console.log(runners)
     
         function updateData() {
-            fetch('/recheck_data?spreadsheet_id=' + encodeURIComponent(s_id))
+            fetch('/recheck_data?once=True&spreadsheet_id=' + encodeURIComponent(s_id))
                 .then(response => response.json())
                 .then(data => {                    
                     if(!arraysMatch(data.runners,runners)){
