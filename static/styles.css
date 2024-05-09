@@ -29,7 +29,7 @@
 }
 
 .runner-table th, .runner-table td {
-    color:white;
+    color:#cacacb;
     font-size: 28px;
     letter-spacing: -1px; 
     width: 200px;
@@ -43,7 +43,7 @@
 .command-text{    
     padding-top: 60px;
     padding-left: 35px;
-    color:white;
+    color:#cacacb;
     font-size: 30px;
     font-family: 'Rubik-Medium';    
     display: flex;
@@ -62,7 +62,7 @@
 
 .racename{
     font-family: 'Rubik-Bold';
-    color:white;
+    color:#cacacb;
     font-size: 65px;
     padding: 20px 20px
 }
