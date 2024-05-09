@@ -22,7 +22,7 @@ def index():
         rungg = runner[4]
         bpt = get_runner_bpt(race_data[1], rungg)
         runners_values[idx].append(bpt)
-    print(runners_values)
+    #print(runners_values)
     return render_template('rotating_info.html', interval = 2000, spreadsheet_id = spreadsheet_id, runner_data = runners_values)
 
 @app.route('/recheck_data')
