@@ -4,33 +4,124 @@
     <title>Rotating Info</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-
-    
-
+   
     <body>
-        <div 
-            id="rotating-field">
+        <div id="rotating-field">      
         </div>  
     </body>
 
-    <script>
-        let layouts = {{layout_files | tojson}};
+    <script>        
+
+        function arraysMatch(arr1, arr2) {
+        // Check if arrays have the same length
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+
+        // Iterate through each array element and compare
+        for (let i = 0; i < arr1.length; i++) {
+            for (let j = 0; j < arr1[i].length; j++) {
+            // If any element is different, arrays don't match
+            if (arr1[i][j] !== arr2[i][j]) {
+                return false;
+            }
+            }
+        }
+
+        // If all elements are the same, arrays match
+        return true;
+        }
+                  
+        let layouts = ['PB', 'IMPROVEMENT', 'EVENT PB', 'LL AVG', 'SOB', 'commands'];
+        let data_map= [12, 13, 14, 15, 16];
         let currentLayout = 0;
+        let runners = {{runner_data | tojson}};
+        let s_id = "{{spreadsheet_id}}";
     
-        function fetchAndDisplayLayout() {
-            fetch('rotating_layouts/' + layouts[currentLayout]) 
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('rotating-field').innerHTML = html;
-                currentLayout = (currentLayout + 1) % layouts.length; // Move to the next layout
-                setTimeout(fetchAndDisplayLayout, {{interval}}); // Call the function again after 15 seconds
-            })
-            .catch(error => {
-                console.error('Error fetching HTML:', error);
-            });
+        function updateData() {
+            fetch('/recheck_data?spreadsheet_id=' + encodeURIComponent(s_id))
+                .then(response => response.json())
+                .then(data => {                    
+                    if(!arraysMatch(data.runners,runners)){
+                        window.location.reload();
+                    }
+                    
+                })
+                .catch(error => {
+                    console.error("Error fetching modification time:", error);
+                });
+        }
+
+
+        function displayLayout() {
+            // Clear the rotating-field div
+            let rotatingField = document.getElementById('rotating-field');
+            rotatingField.innerHTML = '';    
+
+            if (layouts[currentLayout] != 'commands'){
+                // Create a table element
+                let table = document.createElement('table');  
+                table.classList.add('runner-table');  
+                // Append the table to the rotating-field div
+                rotatingField.appendChild(table);
+
+                //header
+                let headerRow = document.createElement('tr');      
+                let spacer_th = document.createElement('th');     
+                let th = document.createElement('th');
+                th.textContent = layouts[currentLayout];
+                headerRow.appendChild(spacer_th);
+                headerRow.appendChild(th);            
+                table.appendChild(headerRow);
+
+                // Create and append table body
+                let tbody = document.createElement('tbody');
+                table.appendChild(tbody);
+
+                // Fill in the table with runner information
+                runners.forEach(runner => {
+                    let row = document.createElement('tr');                
+                    let cellRunner = document.createElement('td');
+                    cellRunner.textContent = runner[0];
+                    row.appendChild(cellRunner);
+                    let cellData = document.createElement('td');
+                    cellData.textContent = runner[data_map[currentLayout]];
+                    row.appendChild(cellData);
+                    
+                    tbody.appendChild(row);
+                });
+
+
+            }else{
+                 // Clear the rotating-field div
+                    rotatingField.innerHTML = '';
+                    let span = document.createElement('span');
+
+                    span.classList.add('command-text'); // Add the class
+                    // Create a text node with the desired text
+                    let textNode1 = document.createTextNode('Twitch Commands:');
+                    let textNode2 = document.createTextNode('!runners !discord !tech');
+                    let textNode3 = document.createTextNode('!schedule !predictions');
+                    // Append the text nodes and line break to the span
+                    span.appendChild(textNode1);
+                    span.appendChild(document.createElement('br')); // Line break
+                    span.appendChild(textNode2);
+                    span.appendChild(document.createElement('br')); // Line break
+                    span.appendChild(textNode3);
+                    // Append the span to the rotating-field div
+                    rotatingField.appendChild(span);
+            }
+            
+
+            
+            currentLayout = (currentLayout + 1) % layouts.length;
+            setTimeout(displayLayout, {{interval}});
+
         }
     
-        fetchAndDisplayLayout(); // Start the process
+        displayLayout(); // Call the function to display the table
+        setInterval(updateData, 10000);
     </script>
+    
     
 </html>

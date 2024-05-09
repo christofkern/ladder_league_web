@@ -1,8 +1,69 @@
-.rotating-field {
-    width: 400px;
+
+@font-face{
+    font-family:'Rubik-Bold';
+    src: url('fonts/Rubik-Bold.ttf') format('truetype');
+}
+
+
+@font-face{
+    font-family:'Rubik-Medium';
+    src: url('fonts/Rubik-Medium.ttf') format('truetype');
+}
+
+#rotating-field {
+    width: 500px;
     height: 300px;
     background-color: #21283f;
     padding: 20px;
     margin: 20px auto;
     text-align: center;
+}
+
+
+.runner-table {
+    border-collapse: separate;
+    border-spacing: 15px 0;
+    border: none;
+    table-layout: fixed;
+    font-family: 'Rubik-Medium';
+}
+
+.runner-table th, .runner-table td {
+    color:white;
+    font-size: 28px;
+    letter-spacing: -1px; 
+    width: 200px;
+    padding-bottom: 20px;
+}
+
+.runner-table th{
+    font-size: 30px;
+}
+
+.command-text{    
+    padding-top: 60px;
+    padding-left: 35px;
+    color:white;
+    font-size: 30px;
+    font-family: 'Rubik-Medium';    
+    display: flex;
+    align-items: center;  
+    text-align: start;  
+    justify-content: flex-start;
+}
+
+.racename-bg{
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.racename{
+    font-family: 'Rubik-Bold';
+    color:white;
+    font-size: 40px;
+    padding: 20px 20px
 }
