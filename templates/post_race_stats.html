@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Race Stats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        
+        
+    </style>
+</head>
+<body>
+    <div class="final-info">
+        <div class="final-time">
+            <img src="{{ final_time_icon }}" alt="Final Time Icon">
+            <p>{{ final_time }}</p>
+        </div>
+        <p>{{ record }}</p>
+        <p>{{ best_time }} (best)</p>
+        <p>{{ average_time }} (avg)</p>
+    </div>
+</body>
+</html>

@@ -79,3 +79,20 @@
     font-size: 50px;
 
 }
+
+.final-info{
+    font-family: 'Rubik-Medium';  
+    color: black;
+    font-size: 34px;
+}
+
+.final-time {
+    position: relative;
+}
+.final-time img {
+    position: absolute;
+    top: 2px;
+    left: 162px; /* Adjust as needed */
+    height: 30px; /* Adjust as needed */
+    width: 30px; /* Adjust as needed */
+}
