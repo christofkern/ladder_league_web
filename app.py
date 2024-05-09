@@ -157,8 +157,7 @@ def post_race_info():
     
 
     final_time = get_final_time(race_id, runner_rungg)
-    final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238066966095204412/image.png?ex=663def36&is=663c9db6&hm=b2dc2c749b4b879b576f7143026ca9e87e6e1b6f68e55a1f414e7d90e25b7c84&"
-        
+    final_time_icon = ""
     if (final_time != 1e8):
         position = get_position(race_id, final_time)        
         if (isQualifier and (position == 1 or (position == 2 and len(runners_values) == 3))):

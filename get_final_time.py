@@ -28,7 +28,7 @@ def calculate_average_time(all_times):
 
 
 def get_final_time(raceid, runner):
-    response = requests.get("https://races.therun.gg/7szf")
+    response = requests.get(f"https://races.therun.gg/{raceid}")
     data = response.json()
     result = data["result"]
     participants = result["participants"]
@@ -40,7 +40,7 @@ def get_final_time(raceid, runner):
     return 1e8
 
 def get_position(race_id, final_time):
-    response = requests.get("https://races.therun.gg/7szf")
+    response = requests.get(f"https://races.therun.gg/{race_id}")
     data = response.json()
     result = data["result"]
     participants = result["participants"]
