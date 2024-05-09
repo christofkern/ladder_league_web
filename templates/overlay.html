@@ -38,6 +38,28 @@
 
 
     <script>
+
+
+        function arraysMatch(arr1, arr2) {
+            // Check if arrays have the same length
+            if (arr1.length !== arr2.length) {
+                return false;
+            }
+
+            // Iterate through each array element and compare
+            for (let i = 0; i < arr1.length; i++) {
+                for (let j = 0; j < arr1[i].length; j++) {
+                // If any element is different, arrays don't match
+                if (arr1[i][j] !== arr2[i][j]) {
+                    return false;
+                }
+                }
+            }
+
+            // If all elements are the same, arrays match
+            return true;
+        }
+
         let runners = {{runner_data | tojson}};
         let s_id = "{{spreadsheet_id}}";
         function checkResult(){
