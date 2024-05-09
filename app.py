@@ -102,7 +102,7 @@ def runner_overlay():
     result = ""
     text_color = ""
     final_time = get_final_time(race_id, runner_rungg)
-    if (final_time != 0):
+    if (final_time != 1e8):
         position = get_position(race_id, final_time)
         if (position != 0):
             write_final_time(spreadsheet_id, runner, str(final_time), runners_values[int(runner)][1], position, runners_values[int(runner)][18])
