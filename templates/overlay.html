@@ -38,6 +38,7 @@
 
 
     <script>
+        let runners = {{runner_data | tojson}};
         let s_id = "{{spreadsheet_id}}";
         function checkResult(){
             fetch('/recheck_data?spreadsheet_id=' + encodeURIComponent(s_id))

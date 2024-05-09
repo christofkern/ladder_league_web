@@ -93,7 +93,7 @@ def runner_overlay():
     runner = request.args.get('runner')
     if (runner == "Test"):
 
-        return render_template('overlay.html', result_string = "Test", text_color = "#EE4266",  final_time = format_milliseconds(12345678))
+        return render_template('overlay.html', result_string = "Test", text_color = "#EE4266", final_time = format_milliseconds(12345678))
 
     if spreadsheet_id is None:
         # Render a template with the error message
@@ -136,7 +136,7 @@ def runner_overlay():
                 result = "DEMOTED"
                 text_color = "#5E1675"
 
-    return render_template('overlay.html', spreadsheet_id = spreadsheet_id, result_string = result, text_color = text_color,  final_time = format_milliseconds(final_time))
+    return render_template('overlay.html', spreadsheet_id = spreadsheet_id, runner_data=runners_values, result_string = result, text_color = text_color,  final_time = format_milliseconds(final_time))
     
 
 
