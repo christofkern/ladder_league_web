@@ -105,7 +105,7 @@ def runner_overlay():
     if (final_time != 1e8):
         position = get_position(race_id, final_time)
         if (position != 0):
-            #write_final_time(spreadsheet_id, runner, str(final_time), runners_values[int(runner)][1], position, runners_values[int(runner)][18])
+            write_final_time(spreadsheet_id, runner, str(final_time), runners_values[int(runner)][1], position, runners_values[int(runner)][18])
             if (isQualifier and (position == 1 or (position == 2 and len(runners_values) == 3))):
                 result = "QUALIFIED"
                 text_color = "#337357"

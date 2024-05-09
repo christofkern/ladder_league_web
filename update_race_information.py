@@ -41,7 +41,9 @@ def write_final_time(spreadsheet_id, index, value, seed, position, tournamen_rec
         body=request_body
     ).execute()
 
+    return
 
+    #skip for now
     #update in LL database
     spreadsheet_id = "1i4DUK9SuWknyS1QW2MXGchRZ4s1cu44CSrNRUP03tvY"
     RANGE_NAME = RANGE_NAME = f'Runners!I{int(seed)+1}'
