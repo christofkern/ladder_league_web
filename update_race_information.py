@@ -33,8 +33,8 @@ def write_final_time(spreadsheet_id, index, value, seed, position, tournamen_rec
     request_body = {
         'values': [[format_milliseconds(value)]]  # Provide the value to be written in a 2D array
     }
-    print(spreadsheet_id)
-    print(value)
+    #print(spreadsheet_id)
+    #print(value)
     # Call the Sheets API to update the cell value
     service.spreadsheets().values().update(
         spreadsheetId=spreadsheet_id,

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, send_from_directory, request, jsonify
 from get_race_information import get_race_information
-from therun_user_info import get_runner_sob
+from therun_user_info import get_runner_sob, get_runner_bpt
 from update_race_information import write_sob, write_final_time
 from states import get_state_flag_url
 from get_final_time import get_final_time, format_milliseconds, get_position, get_best_time, get_average_time
@@ -17,9 +17,13 @@ def index():
     if spreadsheet_id is None:
         # Render a template with the error message
         return render_template('error.html', message='Please provide a valid spreadsheet_id')
-    _, runners_values = get_race_information(spreadsheet_id)
+    race_data, runners_values = get_race_information(spreadsheet_id)
+    for idx, runner in enumerate(runners_values):
+        rungg = runner[4]
+        bpt = get_runner_bpt(race_data[1], rungg)
+        runners_values[idx].append(bpt)
     print(runners_values)
-    return render_template('rotating_info.html', interval = 6000, spreadsheet_id = spreadsheet_id, runner_data = runners_values)
+    return render_template('rotating_info.html', interval = 2000, spreadsheet_id = spreadsheet_id, runner_data = runners_values)
 
 @app.route('/recheck_data')
 def recheck_data():
@@ -32,12 +36,15 @@ def recheck_data():
     race_data, runners_values = get_race_information(spreadsheet_id)
 
     #update data from therun (sob)
-
     if (once == "True"):
         for idx, runner in enumerate(runners_values):
             rungg = runner[4]
             sob = get_runner_sob(rungg)
             write_sob(spreadsheet_id, idx, sob)
+
+            bpt = get_runner_bpt(race_data[1], rungg)
+            runners_values[idx].append(bpt)
+            
 
             final_time = get_final_time(race_data[1], rungg)
             if (final_time != 1e8):
@@ -189,12 +196,21 @@ def post_race_info():
         else:
             final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238066376615399475/image.png?ex=663deeaa&is=663c9d2a&hm=a809d30fbdec89dbc07e69fb8276dd61547e690a4b07a24947544de4fab80cd0&"
 
+    
+        record = runners_values[int(runner)][18]
+        records = record.split('-')
+        records[position - 1] = str(int(records [position - 1]) + 1)
+        record_string = '-'.join(records)
+        best_time = get_best_time(final_time, runners_values[int(runner)][1])
+        average_time = get_average_time(final_time, runners_values[int(runner)][1])
+        final_time = format_milliseconds(final_time)
+    else:
+        record = ""
+        best_time = ""
+        average_time = ""
+        final_time = "Awaiting Data"
 
-    record = runners_values[int(runner)][18]
-    best_time = get_best_time(final_time, runners_values[int(runner)][1])
-    average_time = get_average_time(final_time, runners_values[int(runner)][1])
-
-    return render_template('post_race_stats.html',  final_time = format_milliseconds(final_time), final_time_icon = final_time_icon, record = record, best_time = best_time, average_time = average_time )
+    return render_template('post_race_stats.html',  final_time = final_time, final_time_icon = final_time_icon, record = record_string, best_time = best_time, average_time = average_time )
 
 
 @app.route('/pictures')

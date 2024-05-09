@@ -1,6 +1,8 @@
 import requests
 from googleapiclient.discovery import build
 from get_google_credentials import get_credentials
+import time
+import random
 
 def format_milliseconds(total_milliseconds):
     if isinstance(total_milliseconds, str):
@@ -13,7 +15,7 @@ def format_milliseconds(total_milliseconds):
     return formatted_time
 
 def parse_time_to_milliseconds(formatted_time):
-    formatted_time = formatted_time[1:-1]
+    formatted_time = str(formatted_time)
     if (formatted_time == ''):
         return 1e8
     hours, minutes, seconds = map(int, formatted_time.split(':'))
@@ -58,6 +60,9 @@ def get_position(race_id, final_time):
     return final_times.index(final_time) + 1
 
 def get_best_time(final_time, seed):
+    delay = random.randint(1, 15)
+    time.sleep(delay)
+
     spreadsheet_id = "1i4DUK9SuWknyS1QW2MXGchRZ4s1cu44CSrNRUP03tvY"
     RANGE_NAME = RANGE_NAME = f'Runners!I{int(seed)+1}'
 
@@ -71,12 +76,15 @@ def get_best_time(final_time, seed):
 
     lowest_time = final_time
     for value in current_value:
-        value = parse_time_to_milliseconds(value)
+        value = parse_time_to_milliseconds(value[1:-1])
         if (value < lowest_time):
             lowest_time = value   
     return format_milliseconds(lowest_time)
 
 def get_average_time(final_time, seed):
+    delay = random.randint(1, 15)
+    time.sleep(delay)
+
     spreadsheet_id = "1i4DUK9SuWknyS1QW2MXGchRZ4s1cu44CSrNRUP03tvY"
     RANGE_NAME = RANGE_NAME = f'Runners!I{int(seed)+1}'
 
@@ -87,9 +95,11 @@ def get_average_time(final_time, seed):
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheet_id, range=RANGE_NAME).execute()
     current_value =  result.get('values', [])[0][0]
+    parts = current_value[1:-1].split(',')
     all_times = [final_time]
-    for value in current_value:
+    for value in parts:
         all_times.append(parse_time_to_milliseconds(value))
+    
     
     average_time = calculate_average_time(all_times)
     
