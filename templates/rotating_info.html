@@ -6,7 +6,7 @@
 </head>
    
     <body>
-        <div id="rotating-field">      
+        <div class="rotating-field">      
         </div>  
     </body>
 
@@ -32,8 +32,8 @@
         return true;
         }
                   
-        let layouts = ['PB', 'IMPROVEMENT', 'EVENT PB', 'LL AVG', 'SOB', 'commands'];
-        let data_map= [12, 13, 14, 15, 16];
+        let layouts = ['PB', 'IMPROVEMENT', 'SOB', 'commands']; //'EVENT PB', 'LL AVG',
+        let data_map= [12, 13, 16]; //14, 15, 
         let currentLayout = 0;
         let runners = {{runner_data | tojson}};
         let s_id = "{{spreadsheet_id}}";
