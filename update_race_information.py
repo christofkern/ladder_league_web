@@ -3,7 +3,7 @@ from get_google_credentials import get_credentials
 
 
 def write_sob(spreadsheet_id, index, value):
-    RANGE_NAME = f'Runners!Q{index+2}'  # Specify the cell to write to
+    RANGE_NAME = f'Runners!Q{int(index)index+2}'  # Specify the cell to write to
 
     creds = get_credentials()
     service = build('sheets', 'v4', credentials=creds)
@@ -23,7 +23,7 @@ def write_sob(spreadsheet_id, index, value):
 
     
 def write_final_time(spreadsheet_id, index, value, seed, position, tournamen_record):
-    RANGE_NAME = f'Runners!R{index+2}'  # Specify the cell to write to
+    RANGE_NAME = f'Runners!R{int(index)+2}'  # Specify the cell to write to
 
     creds = get_credentials()
     service = build('sheets', 'v4', credentials=creds)
@@ -44,7 +44,7 @@ def write_final_time(spreadsheet_id, index, value, seed, position, tournamen_rec
 
     #update in LL database
     spreadsheet_id = "1i4DUK9SuWknyS1QW2MXGchRZ4s1cu44CSrNRUP03tvY"
-    RANGE_NAME = RANGE_NAME = f'Runners!I{seed+1}'
+    RANGE_NAME = RANGE_NAME = f'Runners!I{int(seed)+1}'
 
     creds = get_credentials()
     service = build('sheets', 'v4', credentials=creds)
@@ -72,7 +72,7 @@ def write_final_time(spreadsheet_id, index, value, seed, position, tournamen_rec
     records = tournamen_record.split('-')
     records[position - 1] = str(int(records [position - 1]) + 1)
 
-    RANGE_NAME = RANGE_NAME = f'Runners!J{seed+1}'
+    RANGE_NAME = RANGE_NAME = f'Runners!J{int(seed)+1}'
 
     record_string = '-'.join(records)
 
