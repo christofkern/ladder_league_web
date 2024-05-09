@@ -141,14 +141,19 @@ def post_race_info():
     if spreadsheet_id is None:
         # Render a template with the error message
         return render_template('error.html', message='Please provide a valid spreadsheet_id')
+
+    
     race_info, runners_values = get_race_information(spreadsheet_id) 
+
+
+    if runner is None or int(runner) >= len(runners_values):
+        # Render a template with the error message
+        return render_template('error.html', message='Please provide a valid runner index')     
     race_id = race_info[1]
     runner_rungg = runners_values[int(runner)][4]
     isTopRung = bool(race_info[4]) 
     isQualifier = bool(race_info[5])
-    if runner is None or int(runner) >= len(runners_values):
-        # Render a template with the error message
-        return render_template('error.html', message='Please provide a valid runner index')     
+    
 
     final_time = get_final_time(race_id, runner_rungg)
     final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238066966095204412/image.png?ex=663def36&is=663c9db6&hm=b2dc2c749b4b879b576f7143026ca9e87e6e1b6f68e55a1f414e7d90e25b7c84&"
