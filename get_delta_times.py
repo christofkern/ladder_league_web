@@ -30,6 +30,7 @@ def get_level_gold(runner, levels):
 
 
 def get_delta_times(race_id, spreadsheet_id, runners):
+    #print(runners)
 
     deltas = ['-','-','-']
 
@@ -60,6 +61,8 @@ def get_delta_times(race_id, spreadsheet_id, runners):
         splitset = runner_splits[runner]
         if (len(splitset) > 1):
             all_on_first = False
+        else:
+            continue
         if (len(splitset) > most_splits):
             fastest_splittime = splitset[0][1] #need to set this, so it can be compared against later
             most_splits = len(splitset)

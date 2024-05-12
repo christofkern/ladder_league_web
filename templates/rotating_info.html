@@ -32,13 +32,16 @@
         return true;
         }
                   
-        let layouts = ['PB', 'IMPROVEMENT', 'SOB', 'BPT', 'commands']; //'EVENT PB', 'LL AVG',
-        let data_map= [12, 13, 16, 23]; //14, 15, 
+        let layouts = ['PB', 'Impr.', 'SOB', 'BPT', 'commands']; //'EVENT PB', 'LL AVG',
+        let data_map= [12, 13, 16, 17]; //14, 15, 
+        let delta_index = 18
         let currentLayout = 0;
         let runners = {{runner_data | tojson}};
         let s_id = "{{spreadsheet_id}}";
 
-        console.log(runners)
+        
+
+        //console.log(runners)
     
         function updateData() {
             fetch('/recheck_data?once=True&spreadsheet_id=' + encodeURIComponent(s_id))
@@ -70,11 +73,16 @@
                 //header
                 let headerRow = document.createElement('tr');      
                 let spacer_th = document.createElement('th');     
-                let th = document.createElement('th');
-                th.textContent = layouts[currentLayout];
+                let th1 = document.createElement('th');
+                th1.textContent = 'Delta';
+                let th2 = document.createElement('th');
+                th2.textContent = layouts[currentLayout];
                 headerRow.appendChild(spacer_th);
-                headerRow.appendChild(th);            
+                headerRow.appendChild(th1);     
+                headerRow.appendChild(th2);           
                 table.appendChild(headerRow);
+
+                
 
                 // Create and append table body
                 let tbody = document.createElement('tbody');
@@ -86,9 +94,18 @@
                     let cellRunner = document.createElement('td');
                     cellRunner.textContent = runner[0];
                     row.appendChild(cellRunner);
-                    let cellData = document.createElement('td');
-                    cellData.textContent = runner[data_map[currentLayout]];
-                    row.appendChild(cellData);
+                    let cellData1 = document.createElement('td');
+                    cellData1.textContent = runner[delta_index];
+                    if (cellData1.textContent == "1."){
+                        cellData1.classList.add('delta-cell-first');  
+                    }else if (cellData1.textContent != "-"){
+                        cellData1.classList.add('delta-cell-trailing');  
+                    }
+                    
+                    let cellData2 = document.createElement('td');
+                    cellData2.textContent = runner[data_map[currentLayout]];
+                    row.appendChild(cellData1);
+                    row.appendChild(cellData2);
                     
                     tbody.appendChild(row);
                 });
@@ -122,7 +139,7 @@
         }
     
         displayLayout(); // Call the function to display the table
-        setInterval(updateData, 15000);
+        setInterval(updateData, 150000);
     </script>
     
     

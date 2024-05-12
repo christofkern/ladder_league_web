@@ -41,7 +41,22 @@ def write_bpt(spreadsheet_id, index, value):
         body=request_body
     ).execute()
 
+def write_delta_times(spreadsheet_id, delta_times):
+    RANGE_NAME = 'Runners!S2:S4'
+    creds = get_credentials()
+    service = build('sheets', 'v4', credentials=creds)
+    delta_values = [[delta] for delta in delta_times[:3]]
 
+    # Prepare the request body
+    request_body = {'values': delta_values}
+
+    # Call the Sheets API to update the cell value
+    service.spreadsheets().values().update(
+        spreadsheetId=spreadsheet_id,
+        range=RANGE_NAME,
+        valueInputOption='RAW',
+        body=request_body
+    ).execute()
     
 def write_final_time(spreadsheet_id, index, value, seed, position, tournamen_record):
     RANGE_NAME = f'Runners!R{int(index)+2}'  # Specify the cell to write to

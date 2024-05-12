@@ -11,8 +11,8 @@
 }
 
 #rotating-field {
-    width: 500px;
-    height: 300px;
+    width: 600px;
+    height: 200px;
     background-color: #21283f;
     padding: 20px;
     margin: 20px auto;
@@ -28,21 +28,44 @@
     font-family: 'Rubik-Medium';
 }
 
+
+
+
+
 .runner-table th, .runner-table td {
     color:#cacacb;
     font-size: 28px;
     letter-spacing: -1px; 
-    width: 200px;
+    width: 400px;
     padding-bottom: 20px;
+}
+
+.runner-table .delta-cell-first {
+    color: green;    
+}
+
+.runner-table .delta-cell-trailing {
+    color: red
+}
+
+
+.runner-table th,
+.runner-table td {
+    width: 100px; /* Set the width to your desired value */
+    /* You can adjust the width value as needed */
+    /* Optionally, you can also set other properties like padding, text-align, etc. */
+    padding-left: 55px; /* Example padding */
+    text-align: center; /* Example text alignment */
 }
 
 .runner-table th{
     font-size: 30px;
 }
 
+
 .command-text{    
-    padding-top: 60px;
-    padding-left: 35px;
+    padding-top: 50px;
+    padding-left: 55px;
     color:#cacacb;
     font-size: 30px;
     font-family: 'Rubik-Medium';    
@@ -75,8 +98,7 @@
 }
 .time {
     font-family: 'Rubik-Bold';
-    font-size: 50px;
-
+    font-size: 50px;    
 }
 
 .final-info{
@@ -95,3 +117,4 @@
     height: 30px; /* Adjust as needed */
     width: 30px; /* Adjust as needed */
 }
+

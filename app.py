@@ -1,9 +1,10 @@
 from flask import Flask, render_template, send_from_directory, request, jsonify
 from get_race_information import get_race_information
 from therun_user_info import get_runner_sob, get_runner_bpt
-from update_race_information import write_sob, write_final_time, write_bpt
+from update_race_information import write_sob, write_final_time, write_bpt, write_delta_times
 from states import get_state_flag_url
 from get_final_time import get_final_time, format_milliseconds, get_position, get_best_time, get_average_time
+from get_delta_times import get_delta_times
 
 app = Flask(__name__)
 
@@ -18,10 +19,6 @@ def index():
         # Render a template with the error message
         return render_template('error.html', message='Please provide a valid spreadsheet_id')
     race_data, runners_values = get_race_information(spreadsheet_id)
-    for idx, runner in enumerate(runners_values):
-        rungg = runner[4]
-        bpt = get_runner_bpt(race_data[1], rungg)
-        runners_values[idx].append(bpt)
     #print(runners_values)
     return render_template('rotating_info.html', interval = 6000, spreadsheet_id = spreadsheet_id, runner_data = runners_values)
 
@@ -36,22 +33,25 @@ def recheck_data():
     race_data, runners_values = get_race_information(spreadsheet_id)
 
     #update data from therun (sob)
-    if (once == "True"):
+    if (once == "True"):  
+        runners = []
         for idx, runner in enumerate(runners_values):
+            runners.append(runner[0])
             rungg = runner[4]
             sob = get_runner_sob(rungg)
             write_sob(spreadsheet_id, idx, sob)
 
             bpt = get_runner_bpt(race_data[1], rungg)
             write_bpt(spreadsheet_id, idx, bpt)
-            runners_values[idx].append(bpt)
-            
-
+                      
             final_time = get_final_time(race_data[1], rungg)
             if (final_time != 1e8):
                 position = get_position(race_data[1], final_time)
                 if (position != 0):
                     write_final_time(spreadsheet_id, idx, str(final_time), runners_values[idx][1], position, runners_values[idx][18])
+
+        delta_times = get_delta_times(race_data[1], spreadsheet_id, runners)
+        write_delta_times(spreadsheet_id, delta_times)
 
     return jsonify({'runners' : runners_values})
 

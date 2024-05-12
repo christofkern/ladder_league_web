@@ -22,9 +22,9 @@ def format_delta(total_milliseconds):
     seconds = int(total_seconds % 60)
 
     if (minutes > 0):
-        formatted_time = f"+{minutes}:{seconds:02}"
+        formatted_time = f"+ {minutes}:{seconds:02}"
     else:
-        formatted_time = f"+{seconds}"
+        formatted_time = f"+ {seconds}"
     return formatted_time
 
 def parse_time_to_milliseconds(formatted_time):
