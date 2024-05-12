@@ -14,6 +14,19 @@ def format_milliseconds(total_milliseconds):
     formatted_time = f"{hours:02}:{minutes:02}:{seconds:02}"
     return formatted_time
 
+def format_delta(total_milliseconds):
+    if isinstance(total_milliseconds, str):
+        total_milliseconds = float(total_milliseconds)
+    total_seconds = total_milliseconds / 1000  # Convert milliseconds to seconds
+    minutes = int((total_seconds % 3600) // 60)
+    seconds = int(total_seconds % 60)
+
+    if (minutes > 0):
+        formatted_time = f"+{minutes}:{seconds:02}"
+    else:
+        formatted_time = f"+{seconds}"
+    return formatted_time
+
 def parse_time_to_milliseconds(formatted_time):
     formatted_time = str(formatted_time)
     if (formatted_time == ''):
