@@ -1,7 +1,7 @@
 from flask import Flask, render_template, send_from_directory, request, jsonify
 from get_race_information import get_race_information
 from therun_user_info import get_runner_sob, get_runner_bpt
-from update_race_information import write_sob, write_final_time
+from update_race_information import write_sob, write_final_time, write_bpt
 from states import get_state_flag_url
 from get_final_time import get_final_time, format_milliseconds, get_position, get_best_time, get_average_time
 
@@ -43,6 +43,7 @@ def recheck_data():
             write_sob(spreadsheet_id, idx, sob)
 
             bpt = get_runner_bpt(race_data[1], rungg)
+            write_bpt(spreadsheet_id, idx, bpt)
             runners_values[idx].append(bpt)
             
 
@@ -90,10 +91,11 @@ def runnername():
         return render_template('error.html', message='Please provide a valid runner index')
 
     #check if all country codes are the US, country code is index 21
-    if all(r[21] == "US" for r in runners_values):
-        return render_template('runnername_state.html', text_content = f"({runners_values[int(runner)][1]}) {runners_values[int(runner)][0]}", state_flag_url = get_state_flag_url(runners_values[int(runner)][22]))
+    print(runners_values)
+    if all(r[23] == "US" for r in runners_values):
+        return render_template('runnername_state.html', text_content = f"({runners_values[int(runner)][1]}) {runners_values[int(runner)][0]}", state_flag_url = get_state_flag_url(runners_values[int(runner)][24]))
     else:
-        return render_template('runnername_country.html', text_content = f"({runners_values[int(runner)][1]}) {runners_values[int(runner)][0]}", country_code = runners_values[int(runner)][21])
+        return render_template('runnername_country.html', text_content = f"({runners_values[int(runner)][1]}) {runners_values[int(runner)][0]}", country_code = runners_values[int(runner)][23])
 
 
 
@@ -112,7 +114,8 @@ def runner_overlay():
     race_id = race_info[1]
     runner_rungg = runners_values[int(runner)][4]
     isTopRung = bool(race_info[4]) 
-    isQualifier = bool(race_info[5])
+    isBottomRung = bool(race_info[5])
+    isQualifier = bool(race_info[6])
     if runner is None or int(runner) >= len(runners_values):
         # Render a template with the error message
         return render_template('error.html', message='Please provide a valid runner index')     
@@ -142,6 +145,9 @@ def runner_overlay():
             elif (not isTopRung and (position == 1 or position == 2)):
                 result = "PROMOTED"
                 text_color = "#337357"
+            elif (isBottomRung):
+                result = "ELIMINATED"
+                text_color = "#EE4266"
             else:
                 result = "DEMOTED"
                 text_color = "#5E1675"
@@ -170,7 +176,8 @@ def post_race_info():
     race_id = race_info[1]
     runner_rungg = runners_values[int(runner)][4]
     isTopRung = bool(race_info[4]) 
-    isQualifier = bool(race_info[5])
+    isBottomRung = bool(race_info[5])
+    isQualifier = bool(race_info[6])
     
 
     final_time = get_final_time(race_id, runner_rungg)
@@ -192,12 +199,14 @@ def post_race_info():
             if (position == 1):
                 final_time_icon = "https://drive.google.com/thumbnail?id=165dA-f7dY1vpYU0Nwpxu9qh7H_fUN9u-"
             else:
-                final_time_icon = "https://drive.google.com/thumbnail?id=164hSZlm6bK9XAtdfFRSXEJorT_O6a1o-"            
+                final_time_icon = "https://drive.google.com/thumbnail?id=164hSZlm6bK9XAtdfFRSXEJorT_O6a1o-"      
+        elif (isBottomRung):
+            final_time_icon = "https://drive.google.com/thumbnail?id=16-wst51zvLrZ-hpxyeD68qRsfABBtB_y"     
         else:
             final_time_icon = "https://drive.google.com/thumbnail?id=161VlRHWSVv8bzjS9h40PaymYHiZ4fqPG"
 
     
-        record = runners_values[int(runner)][18]
+        record = runners_values[int(runner)][20]
         records = record.split('-')
         records[position - 1] = str(int(records [position - 1]) + 1)
         record_string = '-'.join(records)

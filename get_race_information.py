@@ -3,8 +3,8 @@ from get_google_credentials import get_credentials
 
 
 def get_race_information(spreadsheet_id):
-    RACE_RANGE_NAME = 'Race!A2:F2'
-    RUNNERS_RANGE_NAME = 'Runners!A2:W5'
+    RACE_RANGE_NAME = 'Race!A2:G2'
+    RUNNERS_RANGE_NAME = 'Runners!A2:Y5'
 
     creds = get_credentials()
     service = build('sheets', 'v4', credentials=creds)
