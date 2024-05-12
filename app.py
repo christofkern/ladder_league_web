@@ -174,27 +174,27 @@ def post_race_info():
     
 
     final_time = get_final_time(race_id, runner_rungg)
-    final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238107907963355157/image.png?ex=663e1558&is=663cc3d8&hm=08308591b0591a2db41c51a68bf5f8914dcc7feee6f7ea5ec70f0adde9334503&"
+    final_time_icon = "https://drive.google.com/thumbnail?id=15ubkMalyP-rHUkO4NVe14sTrip34-jO3"
     if (final_time != 1e8):
         position = get_position(race_id, final_time)        
         if (isQualifier and (position == 1 or (position == 2 and len(runners_values) == 3))):
-            final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238066966095204412/image.png?ex=663def36&is=663c9db6&hm=b2dc2c749b4b879b576f7143026ca9e87e6e1b6f68e55a1f414e7d90e25b7c84&"
+            final_time_icon = "https://drive.google.com/thumbnail?id=16-lBbCrLgAG5u3L5f2mRESTu6ONzMy6A"
         elif (isQualifier):
             if (len(runners_values) == 2):
-                final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238067127429238835/image.png?ex=663def5d&is=663c9ddd&hm=5dcc8fa8bbae18496ede2615bfdf6b72017524bfbbb44f6b621b220b7cf3102c&"
+                final_time_icon = "https://drive.google.com/thumbnail?id=15yd1Sae7tB9OZLQgHMU56ROl2ZQCYnvb"
             else:
-                final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238066684091170836/image.png?ex=663deef3&is=663c9d73&hm=6cd0dec79557b809b1b81bd7aa80a8fb05014e863847ea3c4428fb9b8985966d&"
+                final_time_icon = "https://drive.google.com/thumbnail?id=16-wst51zvLrZ-hpxyeD68qRsfABBtB_y"
         elif (isTopRung and position == 1):
-            final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238066966095204412/image.png?ex=663def36&is=663c9db6&hm=b2dc2c749b4b879b576f7143026ca9e87e6e1b6f68e55a1f414e7d90e25b7c84&"
+            final_time_icon = "https://drive.google.com/thumbnail?id=16-lBbCrLgAG5u3L5f2mRESTu6ONzMy6A"
         elif (isTopRung and position == 2):
-            final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238067127429238835/image.png?ex=663def5d&is=663c9ddd&hm=5dcc8fa8bbae18496ede2615bfdf6b72017524bfbbb44f6b621b220b7cf3102c&"
+            final_time_icon = "https://drive.google.com/thumbnail?id=15yd1Sae7tB9OZLQgHMU56ROl2ZQCYnvb"
         elif (not isTopRung and (position == 1 or position == 2)):
             if (position == 1):
-                final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238066014520873011/image.png?ex=663dee54&is=663c9cd4&hm=88691780be63da897350e3999e32895f7a924cd70f727988f327dbef49ad04bf&"
+                final_time_icon = "https://drive.google.com/thumbnail?id=165dA-f7dY1vpYU0Nwpxu9qh7H_fUN9u-"
             else:
-                final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238066233119866900/image.png?ex=663dee88&is=663c9d08&hm=a181e16a363d061fd995bf1bb0a054e8d944d5c41e2f12451a8af3d0a639c721&"            
+                final_time_icon = "https://drive.google.com/thumbnail?id=164hSZlm6bK9XAtdfFRSXEJorT_O6a1o-"            
         else:
-            final_time_icon = "https://cdn.discordapp.com/attachments/1237639431352090654/1238066376615399475/image.png?ex=663deeaa&is=663c9d2a&hm=a809d30fbdec89dbc07e69fb8276dd61547e690a4b07a24947544de4fab80cd0&"
+            final_time_icon = "https://drive.google.com/thumbnail?id=161VlRHWSVv8bzjS9h40PaymYHiZ4fqPG"
 
     
         record = runners_values[int(runner)][18]
