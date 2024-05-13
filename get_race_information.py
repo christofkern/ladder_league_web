@@ -3,7 +3,7 @@ from get_google_credentials import get_credentials
 
 
 def get_race_information(spreadsheet_id):
-    RACE_RANGE_NAME = 'Race!A2:G2'
+    RACE_RANGE_NAME = 'Race!A2:H2'
     RUNNERS_RANGE_NAME = 'Runners!A2:Z5'
 
     creds = get_credentials()

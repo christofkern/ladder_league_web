@@ -12,6 +12,28 @@
 
     <script>        
 
+        function getRandomIndex(max) {
+        return Math.floor(Math.random() * max);
+        }
+
+        function insertLineBreaks(text, maxWidth) {
+        let words = text.split(' ');
+        let lines = [];
+        let currentLine = '';
+
+        words.forEach(word => {
+            if ((currentLine + word).length > maxWidth) {
+            lines.push(currentLine);
+            currentLine = '';
+            }
+            currentLine += word + ' ';
+        });
+
+        lines.push(currentLine); // Add the last line
+
+        return lines.join('<br>'); // Join lines with line breaks
+        }
+
         function arraysMatch(arr1, arr2) {
         // Check if arrays have the same length
         if (arr1.length !== arr2.length) {
@@ -32,13 +54,13 @@
         return true;
         }
                   
-        let layouts = ['PB', 'Impr.', 'SOB', 'BPT', 'commands']; //'EVENT PB', 'LL AVG',
+        let layouts = ['PB', 'Impr.', 'funFacts', 'SOB', 'BPT', 'commands',]; //'EVENT PB', 'LL AVG',
         let data_map= [12, 13, 16, 17]; //14, 15, 
         let delta_index = 18
         let currentLayout = 0;
         let runners = {{runner_data | tojson}};
         let s_id = "{{spreadsheet_id}}";
-
+        let funFactsJS = {{funFacts | tojson}};
         
 
         //console.log(runners)
@@ -63,7 +85,7 @@
             let rotatingField = document.getElementById('rotating-field');
             rotatingField.innerHTML = '';    
 
-            if (layouts[currentLayout] != 'commands'){
+            if (layouts[currentLayout] !== 'commands' & layouts[currentLayout] !== 'funFacts'){
                 // Create a table element
                 let table = document.createElement('table');  
                 table.classList.add('runner-table');  
@@ -111,7 +133,7 @@
                 });
 
 
-            }else{
+            }else if (layouts[currentLayout] == 'commands'){
                  // Clear the rotating-field div
                     rotatingField.innerHTML = '';
                     let span = document.createElement('span');
@@ -129,13 +151,21 @@
                     span.appendChild(textNode3);
                     // Append the span to the rotating-field div
                     rotatingField.appendChild(span);
+            }else if (layouts[currentLayout] == 'funFacts'){
+                
+                let randomIndex = getRandomIndex(funFactsJS.length);
+                let randomFunFact = funFactsJS[randomIndex];
+
+                // Check if the text width exceeds a certain limit and insert line breaks accordingly
+                let maxWidth = 35; // Define your maximum width here
+                let formattedFunFact = insertLineBreaks(randomFunFact, maxWidth);
+                rotatingField.innerHTML = '<span class="command-text">' + formattedFunFact + '</span>';
             }
             
 
             
             currentLayout = (currentLayout + 1) % layouts.length;
             setTimeout(displayLayout, {{interval}});
-
         }
     
         displayLayout(); // Call the function to display the table

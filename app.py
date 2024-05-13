@@ -19,8 +19,9 @@ def index():
         # Render a template with the error message
         return render_template('error.html', message='Please provide a valid spreadsheet_id')
     race_data, runners_values = get_race_information(spreadsheet_id)
-    #print(runners_values)
-    return render_template('rotating_info.html', interval = 6000, spreadsheet_id = spreadsheet_id, runner_data = runners_values)
+    funFacts = race_data[7].split('.')[:-1]
+    #print(funFacts)
+    return render_template('rotating_info.html', interval = 6000, spreadsheet_id = spreadsheet_id, runner_data = runners_values, funFacts = funFacts)
 
 @app.route('/recheck_data')
 def recheck_data():
