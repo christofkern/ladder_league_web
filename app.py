@@ -113,9 +113,9 @@ def runner_overlay():
     race_info, runners_values = get_race_information(spreadsheet_id) 
     race_id = race_info[1]
     runner_rungg = runners_values[int(runner)][4]
-    isTopRung = bool(race_info[4]) 
-    isBottomRung = bool(race_info[5])
-    isQualifier = bool(race_info[6])
+    isTopRung = race_info[4] == "True"
+    isBottomRung = race_info[5] == "True"
+    isQualifier = race_info[6] == "True"
     if runner is None or int(runner) >= len(runners_values):
         # Render a template with the error message
         return render_template('error.html', message='Please provide a valid runner index')     
@@ -175,9 +175,9 @@ def post_race_info():
         return render_template('error.html', message='Please provide a valid runner index')     
     race_id = race_info[1]
     runner_rungg = runners_values[int(runner)][4]
-    isTopRung = bool(race_info[4]) 
-    isBottomRung = bool(race_info[5])
-    isQualifier = bool(race_info[6])
+    isTopRung = race_info[4] == "True"
+    isBottomRung = race_info[5] == "True"
+    isQualifier = race_info[6] == "True"
     
 
     final_time = get_final_time(race_id, runner_rungg)

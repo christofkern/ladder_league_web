@@ -59,8 +59,8 @@ def write_delta_times(spreadsheet_id, delta_times):
     ).execute()
     
 def write_final_time(spreadsheet_id, index, value, seed, position, tournamen_record):
-    RANGE_NAME = f'Runners!R{int(index)+2}'  # Specify the cell to write to
-
+    RANGE_NAME = f'Runners!T{int(index)+2}'  # Specify the cell to write to
+    print(format_milliseconds(value))
     creds = get_credentials()
     service = build('sheets', 'v4', credentials=creds)
 

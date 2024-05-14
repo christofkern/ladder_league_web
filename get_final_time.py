@@ -111,6 +111,8 @@ def get_average_time(final_time, seed):
     parts = current_value[1:-1].split(',')
     all_times = [final_time]
     for value in parts:
+        if (value == ''):
+            continue
         all_times.append(parse_time_to_milliseconds(value))
     
     
