@@ -36,9 +36,9 @@ def recheck_data():
     #update data from therun (sob)
     if (once == "True"):  
         runners = []
-        for idx, runner in enumerate(runners_values):
-            runners.append(runner[0])
+        for idx, runner in enumerate(runners_values):            
             rungg = runner[4]
+            runners.append(rungg)
             sob = get_runner_sob(rungg)
             write_sob(spreadsheet_id, idx, sob)
 
@@ -105,8 +105,7 @@ def runner_overlay():
     spreadsheet_id = request.args.get('spreadsheet_id')
     runner = request.args.get('runner')
     if (runner == "Test"):
-
-        return render_template('overlay.html', result_string = "Test", text_color = "#EE4266", final_time = format_milliseconds(12345678))
+        return render_template('overlay.html',spreadsheet_id = spreadsheet_id,  runner_data=['a'],   result_string = "Test", text_color = "#EE4266", final_time = format_milliseconds(12345678))
 
     if spreadsheet_id is None:
         # Render a template with the error message

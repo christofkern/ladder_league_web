@@ -21,6 +21,9 @@ def get_runner_sob(runner):
     # Check the status of the API
     #print(response.status_code)
 
+
+    if response.status_code == 500:
+        return "--:--:--"
     data = response.json()
     for gamedata in data:
         game = gamedata["game"]
@@ -42,6 +45,8 @@ def get_runner_sob(runner):
 
 def get_runner_bpt(race_id, rungg):
     response = requests.get(f"https://races.therun.gg/{race_id}")
+    if response.status_code == 500:
+        return "--:--:--"
     data = response.json()
     result = data["result"]
     participants = result["participants"]

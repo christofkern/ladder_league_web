@@ -55,7 +55,7 @@
         }
                   
         let layouts = ['PB', 'Impr.', 'funFacts', 'SOB', 'BPT', 'commands',]; //'EVENT PB', 'LL AVG',
-        let data_map= [12, 13, 16, 17]; //14, 15, 
+        let data_map= [12, 13, 0, 16, 17]; //14, 15, 
         let delta_index = 18
         let currentLayout = 0;
         let runners = {{runner_data | tojson}};
@@ -169,7 +169,7 @@
         }
     
         displayLayout(); // Call the function to display the table
-        setInterval(updateData, 150000);
+        setInterval(updateData, 15000);
     </script>
     
     
