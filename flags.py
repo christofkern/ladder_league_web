@@ -54,3 +54,6 @@ def get_state_flag_url(abbreviation):
     }
 
     return flag_urls.get(abbreviation.upper())
+
+def get_country_flag_url(country_code):
+    return f"https://flagsapi.com/{country_code}/flat/64.png"

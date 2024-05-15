@@ -10,71 +10,6 @@
     src: url('fonts/Rubik-Medium.ttf') format('truetype');
 }
 
-#rotating-field {
-    width: 600px;
-    height: 200px;
-    background-color: #21283f;
-    padding: 20px;
-    margin: 20px auto;
-    text-align: center;
-}
-
-
-.runner-table {
-    border-collapse: separate;
-    border-spacing: 15px 0;
-    border: none;
-    table-layout: fixed;
-    font-family: 'Rubik-Medium';
-}
-
-
-
-
-
-.runner-table th, .runner-table td {
-    color:#cacacb;
-    font-size: 28px;
-    letter-spacing: -1px; 
-    width: 400px;
-    padding-bottom: 20px;
-}
-
-.runner-table .delta-cell-first {
-    color: green;    
-}
-
-.runner-table .delta-cell-trailing {
-    color: red
-}
-
-
-.runner-table th,
-.runner-table td {
-    width: 100px; /* Set the width to your desired value */
-    /* You can adjust the width value as needed */
-    /* Optionally, you can also set other properties like padding, text-align, etc. */
-    padding-left: 55px; /* Example padding */
-    text-align: center; /* Example text alignment */
-}
-
-.runner-table th{
-    font-size: 30px;
-}
-
-
-.command-text{    
-    padding-top: 50px;
-    padding-left: 55px;
-    color:#cacacb;
-    font-size: 30px;
-    font-family: 'Rubik-Medium';    
-    display: flex;
-    align-items: center;  
-    text-align: start;  
-    justify-content: flex-start;
-}
-
 .racename-bg{
     display: flex;
     justify-content: center;
@@ -87,34 +22,126 @@
     font-family: 'Rubik-Bold';
     color:#cacacb;
     font-size: 65px;
-    padding: 20px 20px
 }
 
-
-.result {
-    font-family: 'Rubik-Bold';
-    font-size: 60px;
-    margin-bottom: 10px;            
-}
-.time {
-    font-family: 'Rubik-Bold';
-    font-size: 50px;    
-}
-
-.final-info{
-    font-family: 'Rubik-Medium';  
-    color: #cacacb;
-    font-size: 34px;
-}
-
-.final-time {
-    position: relative;
-}
-.final-time img {
+.runnername {
     position: absolute;
-    top: 2px;
-    left: 162px; /* Adjust as needed */
-    height: 30px; /* Adjust as needed */
-    width: 30px; /* Adjust as needed */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; /* Horizontally center items */
+    text-align: center;
+    line-height: 66px;
+    font-family: 'Rubik-Bold';
+    color: #cacacb;
+    font-size: 40px;
+}
+.runnerflag {
+    vertical-align: top; /* or 'top' depending on your preference */
+}
+#name1 {	
+	left: 115px;
+	top: 467px;
+	width: 838px;
+	height: 66px;	
+}
+#name2 {	
+	left: 967px;
+	top: 467px;
+	width: 838px;
+	height: 66px;
+}
+#name3 {
+	left: 115px;
+	top: 1014px;
+	width: 838px;
+	height: 66px;
+}	
+
+
+.layout {
+	background-image: url('images/Ladder_League_3Person.png');
+	width: 1920px;
+	height: 1080px;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	position:absolute;
+	left:0px;
+	top:0px;
+}
+.statistics {
+	display: flex;
+	position: absolute;
+	width: 672px;
+	height: 177px;
+	left: 1050px;
+	top: 857px;
+	font-family: 'Rubik-Bold';
+}
+.carousel-overlay {
+	color:#cacacb;
+	position: absolute;
+	top: 7px;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	z-index: 999;
+	text-align: center;
+	
+  }
+.carousel-overlay-item {
+    flex-grow: 1;
+	width: 1000px;
+}
+.commentators {
+	position: absolute;
+		left: 1100px;
+	top: 580px;
+	width: 234px;
+	height: 233px;
+
+	font-family: 'Rubik-Bold';
+	color:#cacacb;
+	display:flex;
+	align-items: center;
+  	display : flex;
+  	align-items : center;
 }
 
+.timer {
+	position: absolute;
+	width: 301px;
+	height: 109px;
+	left: 1420px;
+	top: 580px;
+	text-align: center;
+	line-height: 109px;
+	color:#cacacb;
+	font-size: 60px;
+	font-family: 'Rubik-Bold';
+}
+.block {
+  text-align: center;
+  margin: 20px;
+}
+ 
+.block:before {
+  content: '';
+  display: inline-block;
+  height: 100%; 
+  vertical-align: middle;
+  margin-right: -0.25em; /* Adjusts for spacing */
+    
+ }
+ 
+.centered {
+  display: inline-block;
+  vertical-align: middle;
+ }
+
+
+.child {
+  width: 223px;
+}

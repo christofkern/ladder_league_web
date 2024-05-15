@@ -2,15 +2,12 @@ from flask import Flask, render_template, send_from_directory, request, jsonify
 from get_race_information import get_race_information
 from therun_user_info import get_runner_sob, get_runner_bpt
 from update_race_information import write_sob, write_final_time, write_bpt, write_delta_times
-from states import get_state_flag_url
+from flags import get_state_flag_url, get_country_flag_url
 from get_final_time import get_final_time, format_milliseconds, get_position, get_best_time, get_average_time
 from get_delta_times import get_delta_times
+from carousel_generator import generate_carousel_items
 
-app = Flask(__name__)
-
-@app.route('/rotating_layouts/<path:filename>')
-def serve_html(filename):
-    return send_from_directory('rotating_layouts', filename)
+app = Flask(__name__, static_folder='static')
 
 @app.route('/')
 def index():
@@ -22,6 +19,43 @@ def index():
     funFacts = race_data[7].split('.')[:-1]
     #print(funFacts)
     return render_template('rotating_info.html', interval = 6000, spreadsheet_id = spreadsheet_id, runner_data = runners_values, funFacts = funFacts)
+
+
+@app.route('/layout')
+def layout():
+    spreadsheet_id = request.args.get('spreadsheet_id')
+    if spreadsheet_id is None:
+        # Render a template with the error message
+        return render_template('error.html', message='Please provide a valid spreadsheet_id')
+    race_data, runners_values = get_race_information(spreadsheet_id)
+    funFacts = race_data[7].split('.')[:-1]
+    #print(funFacts)
+
+    racename = race_data[0]
+    runnernames = [f"({runners_values[i][1]}) {runners_values[i][0]}" for i in range(3)]
+    if all(r[23] == "US" for r in runners_values):
+        flags = [get_state_flag_url(runners_values[i][24]) for i in range(3)]
+    else:
+        flags = [get_country_flag_url(runners_values[i][23]) for i in range(3)]
+    runnerdata = {'runnernames': runnernames,'flags': flags}
+
+    runners = []
+    for runner in runners_values:            
+        runners.append(runner[4])
+
+    delta_data, sorted_runners = get_delta_times(race_data[1], spreadsheet_id, runners)
+    interval_data, _ = get_delta_times(race_data[1], spreadsheet_id, runners, True)
+    #map rungg from sorted runners back to their display names
+    runner_display_names = {runner[4]: f"{runner[0]}" for runner in runners_values}
+    print(sorted_runners)
+    sorted_runners = [runner_display_names[runner_id] for runner_id in sorted_runners]
+    print(sorted_runners)
+
+
+    carousel_runners, carousel_items = generate_carousel_items(sorted_runners, delta_data, interval_data)
+
+
+    return render_template('layout_3P_race.html', spreadsheet_id = spreadsheet_id, racename = racename, runnerdata = runnerdata, carousel_runners=carousel_runners, carousel_items = carousel_items)
 
 @app.route('/recheck_data')
 def recheck_data():
@@ -96,7 +130,7 @@ def runnername():
     if all(r[23] == "US" for r in runners_values):
         return render_template('runnername_state.html', text_content = f"({runners_values[int(runner)][1]}) {runners_values[int(runner)][0]}", state_flag_url = get_state_flag_url(runners_values[int(runner)][24]))
     else:
-        return render_template('runnername_country.html', text_content = f"({runners_values[int(runner)][1]}) {runners_values[int(runner)][0]}", country_code = runners_values[int(runner)][23])
+        return render_template('runnername_country.html', text_content = f"({runners_values[int(runner)][1]}) {runners_values[int(runner)][0]}", country_code = get_country_flag_url(runners_values[int(runner)][23]))
 
 
 
