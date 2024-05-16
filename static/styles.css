@@ -91,6 +91,7 @@
 	text-align: center;
 	
   }
+
 .carousel-overlay-item {
     flex-grow: 1;
 	width: 1000px;
@@ -98,6 +99,13 @@
 .carousel-inner .carousel-item {
     transition-duration: 2s;
   }
+.runner-first {
+	color: green; 
+}
+
+.runner-behind {
+	color: red; 
+}
 .commentators {
 	position: absolute;
 		left: 1100px;

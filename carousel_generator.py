@@ -14,8 +14,13 @@ def generate_carousel_items(sorted_runners, delta_data, sorted_pbs, sorted_imprs
     carousel_items = ''
     for idx,stat in enumerate(stats):
         active = ''
+        color_class_first = ''
+        color_class_behind = ''
         if (idx == 0):
             active = 'active'
+        if (stat.upper() == "DELTA"):
+            color_class_first = 'runner-first'
+            color_class_behind = 'runner-behind'
         carousel_items += f'''
         <div class='carousel-item {active}'>
             <div class='container' style='width:100%; text-align: center; color:#cacacb;'>
@@ -23,15 +28,15 @@ def generate_carousel_items(sorted_runners, delta_data, sorted_pbs, sorted_imprs
                     <h3><b>{stat.upper()}</b></h3>
                 </div>
                 <div class='row pt-3'>
-                    <div class='col-4'>
+                    <div class='col-4 {color_class_first}'>
                         <h3>&nbsp</h3>
                         <h3>{stats[stat][0]}</h3>
                     </div>
-                    <div class='col-4'>
+                    <div class='col-4 {color_class_behind}'>
                         <h3>&nbsp</h3>
                         <h3>{stats[stat][1]}</h3>
                     </div>
-                    <div class='col-4'>
+                    <div class='col-4 {color_class_behind}'>
                         <h3>&nbsp</h3>
                         <h3>{stats[stat][2]}</h3>
                     </div>
