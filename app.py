@@ -18,7 +18,7 @@ def index():
     race_data, runners_values = get_race_information(spreadsheet_id)
     funFacts = race_data[7].split('.')[:-1]
     #print(funFacts)
-    return render_template('rotating_info.html', interval = 6000, spreadsheet_id = spreadsheet_id, runner_data = runners_values, funFacts = funFacts)
+    return render_template('rotating_info.html', interval = 10000, spreadsheet_id = spreadsheet_id, runner_data = runners_values, funFacts = funFacts)
 
 
 @app.route('/layout')
