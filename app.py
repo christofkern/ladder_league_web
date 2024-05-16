@@ -43,16 +43,27 @@ def layout():
     for runner in runners_values:            
         runners.append(runner[4])
 
-    delta_data, sorted_runners = get_delta_times(race_data[1], spreadsheet_id, runners)
+    delta_data, sorted_runners_rungg = get_delta_times(race_data[1], spreadsheet_id, runners)
     interval_data, _ = get_delta_times(race_data[1], spreadsheet_id, runners, True)
     #map rungg from sorted runners back to their display names
     runner_display_names = {runner[4]: f"{runner[0]}" for runner in runners_values}
-    print(sorted_runners)
-    sorted_runners = [runner_display_names[runner_id] for runner_id in sorted_runners]
-    print(sorted_runners)
+    sorted_runners = [runner_display_names[runner_id] for runner_id in sorted_runners_rungg]
 
+    runner_pb_data = {runner[0]: f"{runner[12]}" for runner in runners_values}
+    sorted_pbs = [runner_pb_data[runner_id] for runner_id in sorted_runners]
 
-    carousel_runners, carousel_items = generate_carousel_items(sorted_runners, delta_data, interval_data)
+    runner_impr_data = {runner[0]: f"{runner[13]}" for runner in runners_values}
+    sorted_imprs = [runner_impr_data[runner_id] for runner_id in sorted_runners]
+
+    sorted_bpts = []
+    for runner_rungg in sorted_runners_rungg:
+        sorted_bpts.append(get_runner_bpt(race_data[1], runner_rungg))
+
+    sorted_sobs = []
+    for runner_rungg in sorted_runners_rungg:
+        sorted_sobs.append(get_runner_sob(runner_rungg))
+
+    carousel_runners, carousel_items = generate_carousel_items(sorted_runners, delta_data, sorted_pbs, sorted_imprs, interval_data, sorted_bpts, sorted_sobs)   
 
 
     return render_template('layout_3P_race.html', spreadsheet_id = spreadsheet_id, racename = racename, runnerdata = runnerdata, carousel_runners=carousel_runners, carousel_items = carousel_items)

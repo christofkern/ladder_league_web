@@ -95,6 +95,9 @@
     flex-grow: 1;
 	width: 1000px;
 }
+.carousel-inner .carousel-item {
+    transition-duration: 2s;
+  }
 .commentators {
 	position: absolute;
 		left: 1100px;
