@@ -28,6 +28,8 @@ def get_runner_sob(runner):
     for gamedata in data:
         game = gamedata["game"]
         category = gamedata["run"]       
+        if not ("variables" in gamedata):
+            return "--:--:--"
         solo = gamedata["variables"]
         sob = gamedata["sumOfBests"]
         #print(f"SOB of {runner} is {sob}")
