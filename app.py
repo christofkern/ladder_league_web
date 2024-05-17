@@ -69,41 +69,44 @@ def layout():
 
     return render_template('layout_3P_race.html', spreadsheet_id = spreadsheet_id, automarathon_host = automarathon_host, racename = racename, runnerdata = runnerdata, carousel_runners=carousel_runners, carousel_items = carousel_items)
 
-@app.route('/recheck_data')
+@app.route('/recheck_data_new')
 def recheck_data():
     spreadsheet_id = request.args.get('spreadsheet_id')
-    once = request.args.get('once')
-    if spreadsheet_id is None or spreadsheet_id == '':
+    if spreadsheet_id is None:
+        # Render a template with the error message
         return render_template('error.html', message='Please provide a valid spreadsheet_id')
-
-
     race_data, runners_values = get_race_information(spreadsheet_id)
+    #print(runners_values)
 
-    #update data from therun (sob)
-    if (once == "True"):  
-        runners = []
-        for idx, runner in enumerate(runners_values):            
-            rungg = runner[4]
-            runners.append(rungg)
-            sob = get_runner_sob(rungg)
-            if sob != "--:--:--":
-                write_sob(spreadsheet_id, idx, sob)
+    runners = []
+    for runner in runners_values:            
+        runners.append(runner[4])
 
-                bpt = get_runner_bpt(race_data[1], rungg)
-                write_bpt(spreadsheet_id, idx, bpt)
-                          
-                final_time = get_final_time(race_data[1], rungg)
-                if (final_time != 1e8):
-                    position = get_position(race_data[1], final_time)
-                    if (position != 0):
-                        write_final_time(spreadsheet_id, idx, str(final_time), runners_values[idx][1], position, runners_values[idx][18])
+    delta_data, sorted_runners_rungg = get_delta_times(race_data[1], spreadsheet_id, runners)
+    interval_data, _ = get_delta_times(race_data[1], spreadsheet_id, runners, True)
+    #map rungg from sorted runners back to their display names
+    runner_display_names = {runner[4]: f"{runner[0]}" for runner in runners_values}
+    sorted_runners = [runner_display_names[runner_id] for runner_id in sorted_runners_rungg]
 
-        delta_times = get_delta_times(race_data[1], spreadsheet_id, runners)
-        write_delta_times(spreadsheet_id, delta_times)
+    runner_pb_data = {runner[0]: f"{runner[12]}" for runner in runners_values}
+    sorted_pbs = [runner_pb_data[runner_id] for runner_id in sorted_runners]
 
-    return jsonify({'runners' : runners_values})
+    runner_impr_data = {runner[0]: f"{runner[13]}" for runner in runners_values}
+    sorted_imprs = [runner_impr_data[runner_id] for runner_id in sorted_runners]
 
-@app.route('/recheck_data_new')
+    sorted_bpts = []
+    for runner_rungg in sorted_runners_rungg:
+        sorted_bpts.append(get_runner_bpt(race_data[1], runner_rungg))
+
+    sorted_sobs = []
+    for runner_rungg in sorted_runners_rungg:
+        sorted_sobs.append(get_runner_sob(runner_rungg))
+
+    carousel_runners, carousel_items = generate_carousel_items(sorted_runners, delta_data, sorted_pbs, sorted_imprs, interval_data, sorted_bpts, sorted_sobs)   
+
+    return jsonify({'carousel_runners' : carousel_runners, 'carousel_items' : carousel_items})
+
+@app.route('/recheck_data')
 def recheck_data_new():
     spreadsheet_id = request.args.get('spreadsheet_id')
     once = request.args.get('once')

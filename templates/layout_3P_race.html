@@ -45,6 +45,11 @@
 
 <script>
 
+
+var carouselItemsHTML = `{{ carousel_items | safe }}`;
+var carouselRunnersHTML = `{{ carousel_runners | safe }}`;
+let s_id = "{{spreadsheet_id}}";
+
 function toTime(totalMillis, showDecimal=false, precision=2) {
     const millis = Math.floor(totalMillis%1000);
     const totalSeconds = Math.floor(totalMillis / 1000)
@@ -84,6 +89,25 @@ function toTime(totalMillis, showDecimal=false, precision=2) {
     return timeOut;
 }
 
+function arraysMatch(arr1, arr2) {
+    // Check if arrays have the same length
+    if (arr1.length !== arr2.length) {
+        return false;
+    }
+
+    // Iterate through each array element and compare
+    for (let i = 0; i < arr1.length; i++) {
+        for (let j = 0; j < arr1[i].length; j++) {
+        // If any element is different, arrays don't match
+        if (arr1[i][j] !== arr2[i][j]) {
+            return false;
+        }
+        }
+    }
+
+    // If all elements are the same, arrays match
+    return true;
+}
 function setCommentators(names){
 	var len = 0;
 	for(name of names){
@@ -125,11 +149,14 @@ function setCarousel(runnerHTML, carouselItemsHTML){
 
 
 function updateData() {
-    fetch('/recheck_data_new?once=True&spreadsheet_id=' + encodeURIComponent(s_id))
+    fetch('/recheck_data_new?spreadsheet_id=' + encodeURIComponent(s_id))
         .then(response => response.json())
-        .then(data => {                    
-            if(!arraysMatch(data.runners,runners)){
-                window.location.reload();
+        .then(data => {          
+            console.log(data.carousel_runners)          
+            if(!arraysMatch(data.carousel_runners,carouselRunnersHTML) || !arraysMatch(data.carousel_items,carouselItemsHTML)){
+                carouselRunnersHTML = data.carousel_runners;
+                carouselItemsHTML = data.carousel_items;
+                setCarousel(carouselRunnersHTML, carouselItemsHTML);
             }
             
         })
@@ -141,8 +168,6 @@ function updateData() {
 
 setCommentators([]);
 setRunners();
-var carouselItemsHTML = `{{ carousel_items | safe }}`;
-var carouselRunnersHTML = `{{ carousel_runners | safe }}`;
 setCarousel(carouselRunnersHTML, carouselItemsHTML);
 setInterval(updateData, 15000);
 
