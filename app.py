@@ -1,7 +1,7 @@
 from flask import Flask, render_template, send_from_directory, request, jsonify
 from get_race_information import get_race_information
 from therun_user_info import get_runner_sob, get_runner_bpt
-from update_race_information import write_sob, write_final_time, write_bpt, write_delta_times
+from update_race_information import write_sob, write_final_time, write_bpt, write_delta_times, write_sob_by_rungg
 from flags import get_state_flag_url, get_country_flag_url
 from get_final_time import get_final_time, format_milliseconds, get_position, get_best_time, get_average_time
 from get_delta_times import get_delta_times
@@ -56,16 +56,13 @@ def layout():
     runner_impr_data = {runner[0]: f"{runner[13]}" for runner in runners_values}
     sorted_imprs = [runner_impr_data[runner_id] for runner_id in sorted_runners]
 
-    sorted_bpts = []
-    for runner_rungg in sorted_runners_rungg:
-        sorted_bpts.append(get_runner_bpt(race_data[1], runner_rungg))
+    runner_bpt_data = {runner[0]: f"{runner[17]}" for runner in runners_values}
+    sorted_bpts = [runner_bpt_data[runner_id] for runner_id in sorted_runners]
 
-    sorted_sobs = []
-    for runner_rungg in sorted_runners_rungg:
-        sorted_sobs.append(get_runner_sob(runner_rungg))
+    runner_sob_data = {runner[0]: f"{runner[18]}" for runner in runners_values}
+    sorted_sobs = [runner_sob_data[runner_id] for runner_id in sorted_runners]
 
-    carousel_runners, carousel_items = generate_carousel_items(sorted_runners, delta_data, sorted_pbs, sorted_imprs, interval_data, sorted_bpts, sorted_sobs)   
-
+    carousel_runners, carousel_items = generate_carousel_items(sorted_runners, delta_data, sorted_pbs, sorted_imprs, interval_data, sorted_bpts, sorted_sobs)
 
     return render_template('layout_3P_race.html', spreadsheet_id = spreadsheet_id, automarathon_host = automarathon_host, racename = racename, runnerdata = runnerdata, carousel_runners=carousel_runners, carousel_items = carousel_items)
 
@@ -97,10 +94,12 @@ def recheck_data():
     sorted_bpts = []
     for runner_rungg in sorted_runners_rungg:
         sorted_bpts.append(get_runner_bpt(race_data[1], runner_rungg))
-
+        
     sorted_sobs = []
     for runner_rungg in sorted_runners_rungg:
-        sorted_sobs.append(get_runner_sob(runner_rungg))
+        sob = get_runner_sob(runner_rungg)
+        sorted_sobs.append(sob)
+        #write_sob_by_rungg(spreadsheet_id, runner_rungg, sob)
 
     carousel_runners, carousel_items = generate_carousel_items(sorted_runners, delta_data, sorted_pbs, sorted_imprs, interval_data, sorted_bpts, sorted_sobs)   
 
@@ -226,7 +225,7 @@ def runner_overlay():
             elif (isTopRung and position == 2):
                 result = "RUNNER-UP"
                 text_color = "#FFD23F"
-            elif (not isTopRung and (position == 1 or position == 2)):
+            elif (not isTopRung and (position == 1 or (position == 2 and not isBottomRung ))):
                 result = "PROMOTED"
                 text_color = "#337357"
             elif (isBottomRung):

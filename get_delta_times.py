@@ -31,6 +31,8 @@ def get_level_gold(runner, levels):
 def delta_sort(item):
     if item == 'LEADER':
         return (0, float('inf')) 
+    if item == '-':
+        return (2, float('inf')) 
     else:
         return (1, item)  
 
@@ -116,12 +118,16 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
 
     second_best_time = float('inf')
     for idx, delta in enumerate(deltas):
+        #print(deltas)
         if (delta == "LEADER"):            
             sorted_runners[0] = runners[idx]
         else:
-            if (delta < second_best_time):
+            if (delta == '-'):
+                sorted_runners[2] = runners[idx]
+            elif (delta < second_best_time):
                 second_best_time = delta
-                sorted_runners[2] = sorted_runners[1]
+                if (sorted_runners[2] != '-'):
+                    sorted_runners[2] = sorted_runners[1]
                 sorted_runners[1] = runners[idx]
             else:
                 sorted_runners[2] = runners[idx]
@@ -130,7 +136,8 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
     deltas = sorted(deltas, key=delta_sort)
     if (interval):
         deltas[0] = "INTERVAL"
-        deltas[2] = deltas[2] - deltas[1]
+        if (deltas[2] != '-'):
+            deltas[2] = deltas[2] - deltas[1]
     #format deltas
     deltas = [format_delta(item) if isinstance(item, float) else item for item in deltas]
 

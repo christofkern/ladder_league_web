@@ -22,6 +22,38 @@ def write_sob(spreadsheet_id, index, value):
         body=request_body
     ).execute()
 
+def write_sob_by_rungg(spreadsheet_id, rungg, value):
+    FIND_INDEX_RANGE= 'RUNNERS!E2:E4'
+    creds = get_credentials()
+    service = build('sheets', 'v4', credentials=creds)
+
+    runners_result = service.values().get(spreadsheetId=spreadsheet_id,
+                                range=FIND_INDEX_RANGE).execute()
+    #print(runners_result)
+    runners = runners_result.get('values', [])[0]
+    
+    for idx, runner in enumerate(runners):
+        if runner == rungg:
+            index = idx
+            break
+
+    RANGE_NAME = f'Runners!Q{int(index)+2}'  # Specify the cell to write to
+
+  
+
+    # Prepare the request body
+    request_body = {
+        'values': [[value]]  # Provide the value to be written in a 2D array
+    }
+
+    # Call the Sheets API to update the cell value
+    service.spreadsheets().values().update(
+        spreadsheetId=spreadsheet_id,
+        range=RANGE_NAME,
+        valueInputOption='RAW',
+        body=request_body
+    ).execute()
+
 def write_bpt(spreadsheet_id, index, value):
     RANGE_NAME = f'Runners!R{int(index)+2}'  # Specify the cell to write to
 

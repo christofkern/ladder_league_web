@@ -142,8 +142,9 @@ function setRunners(){
 	}
 }
 
-function setCarousel(runnerHTML, carouselItemsHTML){	
-	document.getElementById("carousel-inner").innerHTML = carouselItemsHTML;
+function setCarousel(runnerHTML, carouselItemsHTML){		
+    document.getElementById("carouselExampleSlidesOnly").innerHTML = '<div class="carousel-inner" id="carousel-inner"> </div>'    
+    document.getElementById("carousel-inner").innerHTML = carouselItemsHTML;   
 	document.getElementById("carouselExampleSlidesOnly").innerHTML += runnerHTML;
 }
 
