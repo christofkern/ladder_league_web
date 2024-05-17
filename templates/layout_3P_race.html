@@ -124,12 +124,27 @@ function setCarousel(runnerHTML, carouselItemsHTML){
 }
 
 
+function updateData() {
+    fetch('/recheck_data_new?once=True&spreadsheet_id=' + encodeURIComponent(s_id))
+        .then(response => response.json())
+        .then(data => {                    
+            if(!arraysMatch(data.runners,runners)){
+                window.location.reload();
+            }
+            
+        })
+        .catch(error => {
+            console.error("Error fetching modification time:", error);
+        });
+}
+
+
 setCommentators([]);
 setRunners();
 var carouselItemsHTML = `{{ carousel_items | safe }}`;
 var carouselRunnersHTML = `{{ carousel_runners | safe }}`;
 setCarousel(carouselRunnersHTML, carouselItemsHTML);
-
+setInterval(updateData, 15000);
 
 
 </script>
