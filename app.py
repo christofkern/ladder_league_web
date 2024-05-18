@@ -252,7 +252,7 @@ def post_race_info():
             if (position == 1):
                 final_time_icon = "https://drive.google.com/thumbnail?id=165dA-f7dY1vpYU0Nwpxu9qh7H_fUN9u-"
             else:
-                final_time_icon = "https://drive.google.com/thumbnail?id=164hSZlm6bK9XAtdfFRSXEJorT_O6a1o-"      
+                final_time_icon = "https://drive.google.com/thumbnail?id=165dA-f7dY1vpYU0Nwpxu9qh7H_fUN9u-"#"https://drive.google.com/thumbnail?id=164hSZlm6bK9XAtdfFRSXEJorT_O6a1o-"      
         elif (isBottomRung):
             final_time_icon = "https://drive.google.com/thumbnail?id=16-wst51zvLrZ-hpxyeD68qRsfABBtB_y"     
         else:

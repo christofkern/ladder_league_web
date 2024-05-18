@@ -38,9 +38,12 @@
 </div>
 </div>
 </div>
+<!--
 <div class="timer" id="main_timer">
+   
 00:00:00
 </div>
+ -->
 </body>
 
 
@@ -166,6 +169,7 @@ function setCarousel(runnerHTML, carouselItemsHTML){
 
 
 function updateCarousel() {
+    setTimeout(updateCarousel, 12000);
     fetch('/recheck_data_new?spreadsheet_id=' + encodeURIComponent(s_id))
         .then(response => response.json())
         .then(data => {             
@@ -294,14 +298,16 @@ function updateOverlays(){
 
 setCommentators([]);
 setRunners();
-setInterval(updateCarousel, 12000); //this needs to be synced to the carousel
+setTimeout(updateCarousel, 12000); //this needs to be synced to the carousel
 setInterval(updateOverlays, 15000);
 updateOverlays();
 
 
 
 </script>
+
 <script>
+    /*
     var timer = 0;
     var startDate = null;
     var actualEnd = null;
@@ -361,6 +367,7 @@ updateOverlays();
     function timer() {
     }
     setInterval(timer, 500);
+    */
 </script>
 
 </html>

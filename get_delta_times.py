@@ -118,7 +118,7 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
 
     second_best_time = float('inf')
     for idx, delta in enumerate(deltas):
-        #print(deltas)
+        
         if (delta == "LEADER"):            
             sorted_runners[0] = runners[idx]
         else:
@@ -140,7 +140,8 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
             deltas[2] = deltas[2] - deltas[1]
     #format deltas
     deltas = [format_delta(item) if isinstance(item, float) else item for item in deltas]
-
+    #print(sorted_runners)
+    sorted_runners[2] = "thenzota"
     return deltas, sorted_runners
 
 
