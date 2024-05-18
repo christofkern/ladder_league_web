@@ -215,8 +215,9 @@ function carouselOverlayVisibility(){
     }
     if (activeIndex == 6){
         releaseRunners();
-        //1 in 8 chance to attach a fun fact
-        const randomNumber = Math.floor(Math.random() * 4) + 1;
+        //1 in 4 chance to attach a fun fact
+        let randomNumber = Math.random() * 4;
+        randomNumber = Math.floor(randomNumber) + 1;
         if (randomNumber === 1){
             attachFunFact();
         }        
@@ -225,7 +226,7 @@ function carouselOverlayVisibility(){
 }
 
 function attachFunFact(){   
-    console.log("attach Fun Fact")
+    //console.log("attach Fun Fact")
     let funFactsString = '{{ fun_facts | tojson | safe }}';       
     funFactsString = funFactsString.substring(1, funFactsString.length - 1);
     // Split the string into an array
@@ -236,7 +237,7 @@ function attachFunFact(){
 
 }
 function removeFunFact(){    
-    console.log("funFact remove attempt")
+    //console.log("funFact remove attempt")
     const funFactItems = document.querySelectorAll('.funFact');
 
     // Loop through each funFact item and remove it
