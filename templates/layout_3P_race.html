@@ -152,25 +152,105 @@ function setCarousel(runnerHTML, carouselItemsHTML){
 function updateData() {
     fetch('/recheck_data_new?spreadsheet_id=' + encodeURIComponent(s_id))
         .then(response => response.json())
-        .then(data => {          
-            console.log(data.carousel_runners)          
+        .then(data => {             
             if(!arraysMatch(data.carousel_runners,carouselRunnersHTML) || !arraysMatch(data.carousel_items,carouselItemsHTML)){
                 carouselRunnersHTML = data.carousel_runners;
                 carouselItemsHTML = data.carousel_items;
                 setCarousel(carouselRunnersHTML, carouselItemsHTML);
             }
-            
+            setTimeout(carouselOverlayVisibility, 2000);
         })
         .catch(error => {
             console.error("Error fetching modification time:", error);
         });
 }
 
+function getActiveCarouselIndex() {
+    // Get the carousel-inner element
+    const carouselInner = document.getElementById('carousel-inner');
+    
+    // Get all carousel items within the carousel-inner element
+    const items = carouselInner.getElementsByClassName('carousel-item');
+    
+    // Loop through the items to find the one with the 'active' class
+    for (let i = 0; i < items.length; i++) {
+        if (items[i].classList.contains('active')) {
+            return i; // Return the index of the active item
+        }
+    }
+    
+    // If no active item is found, return -1
+    return -1;
+}
+
+function fixateRunners() {
+    const overlayItems = document.querySelectorAll('.carousel-overlay-item');
+    overlayItems.forEach(item => {
+        item.classList.remove('invisible');
+    });    
+    const carouseLRunners = document.querySelectorAll('.carousel-runner');
+    carouseLRunners.forEach(item => {
+        item.classList.add('invisible');
+    });   
+}
+
+function releaseRunners() {
+    const overlayItems = document.querySelectorAll('.carousel-overlay-item');
+    overlayItems.forEach(item => {
+        item.classList.add('invisible');
+    });
+    const carouseLRunners = document.querySelectorAll('.carousel-runner');
+    carouseLRunners.forEach(item => {
+        item.classList.remove('invisible');
+    });  
+}
+
+function carouselOverlayVisibility(){
+    activeIndex = getActiveCarouselIndex();
+    //find out current active index, if it is 1 or 6, then set the overlay to visible/invisible
+    //console.log(activeIndex)
+    if (activeIndex == 1){
+        fixateRunners();
+        removeFunFact();
+    }
+    if (activeIndex == 6){
+        releaseRunners();
+        //1 in 8 chance to attach a fun fact
+        let random = Math.random() * 4;
+        random = Math.floor(random ) + 1;    
+        if (random === 1){
+            attachFunFact();
+        }        
+    }
+
+}
+
+function attachFunFact(){   
+    //console.log("attach Fun Fact")
+    let funFactsString = '{{ fun_facts | tojson | safe }}';       
+    funFactsString = funFactsString.substring(1, funFactsString.length - 1);
+    // Split the string into an array
+    let funFacts = funFactsString.split('", "');
+
+    const randomFunFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+    document.getElementById("carousel-inner").innerHTML += randomFunFact;
+
+}
+function removeFunFact(){    
+    //console.log("funFact remove attempt")
+    const funFactItems = document.querySelectorAll('.funFact');
+
+    // Loop through each funFact item and remove it
+    funFactItems.forEach(item => {
+        item.parentNode.removeChild(item);
+    });
+}
+
 
 setCommentators([]);
 setRunners();
-setCarousel(carouselRunnersHTML, carouselItemsHTML);
-setInterval(updateData, 15000);
+setInterval(updateData, 12000); //this needs to be synced to the carousel
+
 
 
 </script>
