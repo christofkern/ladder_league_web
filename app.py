@@ -3,7 +3,7 @@ from get_race_information import get_race_information
 from therun_user_info import get_runner_sob, get_runner_bpt
 from update_race_information import write_sob, write_final_time, write_bpt, write_delta_times, write_sob_by_rungg
 from flags import get_state_flag_url, get_country_flag_url
-from get_final_time import get_final_time, format_milliseconds, get_position, get_best_time, get_average_time
+from get_final_time import get_final_time, format_milliseconds, get_position, get_best_time, get_average_time, get_final_times
 from get_delta_times import get_delta_times
 from carousel_generator import generate_carousel_items
 
@@ -67,7 +67,7 @@ def layout():
     return render_template('layout_3P_race.html', spreadsheet_id = spreadsheet_id, automarathon_host = automarathon_host, racename = racename, runnerdata = runnerdata, carousel_runners=carousel_runners, carousel_items = carousel_items, fun_facts = fun_facts)
 
 @app.route('/recheck_data_new')
-def recheck_data():
+def recheck_data_new():
     spreadsheet_id = request.args.get('spreadsheet_id')
     if spreadsheet_id is None:
         # Render a template with the error message
@@ -106,8 +106,66 @@ def recheck_data():
 
     return jsonify({'carousel_runners' : carousel_runners, 'carousel_items' : carousel_items})
 
+@app.route('/check_final')
+def check_final():
+    spreadsheet_id = request.args.get('spreadsheet_id')
+    if spreadsheet_id is None:
+        # Render a template with the error message
+        return render_template('error.html', message='Please provide a valid spreadsheet_id')
+    
+    race_info, runners_values = get_race_information(spreadsheet_id) 
+    race_id = race_info[1]
+    runner_runggs = [runners_values[int(runner)][4] for runner in range(3)]
+    isTopRung = race_info[4] == "True"
+    isBottomRung = race_info[5] == "True"
+    isQualifier = race_info[6] == "True"
+    
+    results = []
+    text_colors = []
+
+    final_times = get_final_times(race_id, runner_runggs)
+    for final_time in final_times:    
+        if (final_time != 1e8):
+            position = get_position(race_id, final_time)
+            if (position != 0):
+                if (isQualifier and (position == 1 or (position == 2 and len(runners_values) == 3))):
+                    results.append("QUALIFIED")
+                    text_colors.append("#337357")
+                elif (isQualifier):
+                    if (len(runners_values) == 2):
+                        results.append("RUNNER-UP")
+                        text_colors.append("#FFD23F")
+                    else:   
+                        results.append("ELIMINATED")
+                        text_colors.append("#EE4266")
+                elif (isTopRung and position == 1):
+                    results.append("QUALIFIED")
+                    text_colors.append("#337357")
+                elif (isTopRung and position == 2):
+                    results.append("RUNNER-UP")
+                    text_colors.append("#FFD23F")
+                elif (not isTopRung and (position == 1 or (position == 2 and not isBottomRung ))):
+                    results.append("PROMOTED")
+                    text_colors.append("#337357")
+                elif (isBottomRung):
+                    results.append("ELIMINATED")
+                    text_colors.append("#EE4266")
+                else:
+                    results.append("DEMOTED")
+                    text_colors.append("#5E1675")
+            else:
+                results.append('')
+                text_colors.append('')  
+        else:
+            results.append('')
+            text_colors.append('')
+    final_times = [format_milliseconds(final_time) for final_time in final_times]
+    print(final_times)
+    print(results)
+    return jsonify({'final_times' : final_times, 'results': results, 'text_colors' : text_colors})
+
 @app.route('/recheck_data')
-def recheck_data_new():
+def recheck_data():
     spreadsheet_id = request.args.get('spreadsheet_id')
     once = request.args.get('once')
     if spreadsheet_id is None or spreadsheet_id == '':

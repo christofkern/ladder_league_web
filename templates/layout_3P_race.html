@@ -43,6 +43,22 @@
 </div>
 </body>
 
+
+<div class="overlay-p1 invisible">       
+    <p id="overlay-p1" class="overlay-text"></p>    
+</div>
+
+<div class="overlay-p2 invisible">       
+    <p id="overlay-p2"  class="overlay-text"></p>    
+</div>
+
+<div class="overlay-p3 invisible">       
+    <p id="overlay-p3" class="overlay-text"></p>    
+</div>
+
+
+
+
 <script>
 
 
@@ -149,7 +165,7 @@ function setCarousel(runnerHTML, carouselItemsHTML){
 }
 
 
-function updateData() {
+function updateCarousel() {
     fetch('/recheck_data_new?spreadsheet_id=' + encodeURIComponent(s_id))
         .then(response => response.json())
         .then(data => {             
@@ -246,10 +262,41 @@ function removeFunFact(){
     });
 }
 
+function updateOverlays(){
+    fetch('/check_final?spreadsheet_id=' + encodeURIComponent(s_id))
+        .then(response => response.json())
+        .then(data => {   
+            let final_times = data.final_times;
+            let results = data.results;
+            let colors = data.text_colors;   
+            
+            final_times.forEach((item,index) => {
+                if (item != '27:46:40'){
+                    let overlay = document.getElementsByClassName('overlay-p' + (index+1))[0];
+                    let overlay_text = document.getElementById('overlay-p' + (index+1));
+                    
+                    overlay.classList.remove('invisible');
+                    overlay_text.innerHTML = final_times[index] + '<br>' + results[index]
+                    overlay_text.style.color = colors[index]
+                }
+                else{
+                    let overlay = document.getElementsByClassName('overlay-p' + (index+1))[0];
+                    overlay.classList.add('invisible');
+                }
+            })
+            
+        })
+        .catch(error => {
+            console.error("Error fetching modification time:", error);
+        });
+}
+
 
 setCommentators([]);
 setRunners();
-setInterval(updateData, 12000); //this needs to be synced to the carousel
+setInterval(updateCarousel, 12000); //this needs to be synced to the carousel
+setInterval(updateOverlays, 15000);
+updateOverlays();
 
 
 

@@ -11,7 +11,7 @@ def format_milliseconds(total_milliseconds):
     hours = int(total_seconds // 3600)
     minutes = int((total_seconds % 3600) // 60)
     seconds = int(total_seconds % 60)
-    formatted_time = f"{hours:02}:{minutes:02}:{seconds:02}"
+    formatted_time = f"{hours}:{minutes:02}:{seconds:02}"
     return formatted_time
 
 def format_delta(total_milliseconds):
@@ -53,6 +53,22 @@ def get_final_time(raceid, runner):
             if (finalTime is not None):
                 return finalTime
     return 1e8
+
+def get_final_times(raceid, runners):
+    response = requests.get(f"https://races.therun.gg/{raceid}")
+    data = response.json()
+    result = data["result"]
+    participants = result["participants"]
+    final_times = []
+    for runner in runners:
+        for participant in participants:
+            if (participant["user"].lower() == runner.lower()):
+                finalTime = participant["finalTime"]                
+                if (finalTime is not None):
+                    final_times.append(finalTime)
+                else:
+                    final_times.append(1e8)
+    return final_times
 
 def get_position(race_id, final_time):
     response = requests.get(f"https://races.therun.gg/{race_id}")

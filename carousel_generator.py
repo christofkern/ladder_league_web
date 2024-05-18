@@ -3,10 +3,10 @@ def generate_carousel_items(racename, sorted_runners, delta_data, sorted_pbs, so
 
     stats = {
         "TITLE":[],
-        "DELTA":delta_data,
+        "RACE DELTA":delta_data,
         "PERSONAL BEST": sorted_pbs,
         "IMPROVEMENT SINCE SEEDING": sorted_imprs,
-        "delta":interval_data,
+        "RACE delta":interval_data,
         "SUM OF BEST SEGMENTS": sorted_sobs,    
         "BEST POSSIBLE TIME": sorted_bpts,    
     }
@@ -37,10 +37,10 @@ def generate_carousel_items(racename, sorted_runners, delta_data, sorted_pbs, so
                                     <div class='pt-4 carousel-header'>
                                         <b>{racename}</b>
                                     </div>
-                                    <div class='pt-3 carousel-commands'>
-                                        <b>Try out these commands:</b>
+                                    <div class='pt-3 carousel-commands'>                                        
+                                        <b>!runners !discord !tech</b>
                                         <br>
-                                        <b>!tech</b>
+                                        <b>!schedule !predictions</b>
                                     </div>
                                 </div>
                             </div>

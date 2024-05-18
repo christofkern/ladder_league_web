@@ -165,3 +165,50 @@
 .child {
   width: 223px;
 }
+
+
+.overlay-p1 {
+    position: absolute;
+    top: 0;
+    left: 115px;
+    width: 838px;
+    height: 467px;
+    background-color: rgba(0, 0, 0, 0.85);
+}
+.overlay-p2 {
+    position: absolute;
+    top: 0;
+    left: 967px;
+    width: 838px;
+    height: 467px;
+    background-color: rgba(0, 0, 0, 0.85); 
+}
+
+.overlay-p3 {
+    position: absolute;
+    top: 547px;
+    left: 115px;
+    width: 838px;
+    height: 467px;
+    background-color: rgba(0, 0, 0, 0.85); 
+}
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+	font-family: 'Rubik-Bold';
+	font-size: 54px;
+}
+
+.good {
+    color: green;
+}
+
+.bad {
+    color: red;
+}
