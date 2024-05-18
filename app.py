@@ -62,9 +62,9 @@ def layout():
     runner_sob_data = {runner[0]: f"{runner[18]}" for runner in runners_values}
     sorted_sobs = [runner_sob_data[runner_id] for runner_id in sorted_runners]
 
-    carousel_runners, carousel_items = generate_carousel_items(sorted_runners, delta_data, sorted_pbs, sorted_imprs, interval_data, sorted_bpts, sorted_sobs)
+    carousel_runners, carousel_items, fun_facts = generate_carousel_items(race_data[0], sorted_runners, delta_data, sorted_pbs, sorted_imprs, interval_data, sorted_bpts, sorted_sobs, funFacts)
 
-    return render_template('layout_3P_race.html', spreadsheet_id = spreadsheet_id, automarathon_host = automarathon_host, racename = racename, runnerdata = runnerdata, carousel_runners=carousel_runners, carousel_items = carousel_items)
+    return render_template('layout_3P_race.html', spreadsheet_id = spreadsheet_id, automarathon_host = automarathon_host, racename = racename, runnerdata = runnerdata, carousel_runners=carousel_runners, carousel_items = carousel_items, fun_facts = fun_facts)
 
 @app.route('/recheck_data_new')
 def recheck_data():
@@ -73,6 +73,7 @@ def recheck_data():
         # Render a template with the error message
         return render_template('error.html', message='Please provide a valid spreadsheet_id')
     race_data, runners_values = get_race_information(spreadsheet_id)
+    funFacts = race_data[7].split('.')[:-1]
     #print(runners_values)
 
     runners = []
@@ -101,7 +102,7 @@ def recheck_data():
         sorted_sobs.append(sob)
         #write_sob_by_rungg(spreadsheet_id, runner_rungg, sob)
 
-    carousel_runners, carousel_items = generate_carousel_items(sorted_runners, delta_data, sorted_pbs, sorted_imprs, interval_data, sorted_bpts, sorted_sobs)   
+    carousel_runners, carousel_items, fun_facts = generate_carousel_items(race_data[0], sorted_runners, delta_data, sorted_pbs, sorted_imprs, interval_data, sorted_bpts, sorted_sobs, funFacts)   
 
     return jsonify({'carousel_runners' : carousel_runners, 'carousel_items' : carousel_items})
 

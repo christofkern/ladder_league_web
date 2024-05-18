@@ -17,21 +17,21 @@
         }
 
         function insertLineBreaks(text, maxWidth) {
-        let words = text.split(' ');
-        let lines = [];
-        let currentLine = '';
+            let words = text.split(' ');
+            let lines = [];
+            let currentLine = '';
 
-        words.forEach(word => {
-            if ((currentLine + word).length > maxWidth) {
-            lines.push(currentLine);
-            currentLine = '';
-            }
-            currentLine += word + ' ';
-        });
+            words.forEach(word => {
+                if ((currentLine + word).length > maxWidth) {
+                lines.push(currentLine);
+                currentLine = '';
+                }
+                currentLine += word + ' ';
+            });
 
-        lines.push(currentLine); // Add the last line
+            lines.push(currentLine); // Add the last line
 
-        return lines.join('<br>'); // Join lines with line breaks
+            return lines.join('<br>'); // Join lines with line breaks
         }
 
         function arraysMatch(arr1, arr2) {
