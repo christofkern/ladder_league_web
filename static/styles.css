@@ -22,6 +22,7 @@
     font-family: 'Rubik-Bold';
     color: #cacacb;
     font-size: 40px;
+	z-index: 2;
 }
 .runnerflag {
     vertical-align: top; /* or 'top' depending on your preference */
@@ -43,7 +44,7 @@
 	top: 1014px;
 	width: 838px;
 	height: 66px;
-}	
+}
 
 
 
@@ -70,14 +71,172 @@
 }
 
 
+.summary{	
+	position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden; /* Ensure content doesn't overflow */
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Background div is above the image */
+}
+
+
 .racetitle {
 	font-family: 'Rubik-Bold';
 	color:#cacacb;
 	font-size: 95px;
 	padding-bottom: 20px;
 }
-	
 
+.racetitle-summary {
+	position: relative;
+	font-family: 'Rubik-Bold';
+	color:#cacacb;
+	font-size: 75px;
+	padding-top: 40px;
+	z-index: 2;
+}
+	
+#img1{
+	position:absolute;
+	top: 181px;
+	left: 212px;
+	width: 365px;
+	height: 262px;
+	z-index: 0;
+}
+#img2{
+	position:absolute;
+	top: 181px;
+	left: 778px;
+	width: 365px;
+	height: 262px;
+	z-index: 0;
+}
+#img3{
+	position:absolute;
+	top: 181px;
+	left: 1344px;
+	width: 365px;
+	height: 262px;
+	z-index: 0;
+}
+
+
+#summary-name1 {	
+	font-size:32px;
+	left: 212px;
+	top: 443px;
+	width: 365px;
+	height: 75px;	
+}
+#summary-name2 {
+	font-size:32px;	
+	left: 778px;
+	top: 443px;
+	width: 365px;
+	height: 75px;	
+}
+#summary-name3 {
+	font-size:32px;
+	left: 1344px;
+	top: 443px;
+	width: 365px;
+	height: 75px;	
+}	
+
+
+.result-info{
+	position:relative;
+	font-family: 'Rubik-Medium';
+	color:#cacacb;
+	font-size: 28px;
+	text-align: start;
+}	
+.final-time-img {
+    height: 38px; 
+    width: 30px;
+	padding-bottom: 8px;
+}
+
+#final-info-p1{
+	position: absolute;
+	left: 231px;
+	top: 518px;
+	width: 326px;
+	height: 370px;
+	z-index: 2;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+}
+#loading-container-p1 {
+	position: absolute;
+	left: 231px;
+	top: 518px;
+	width: 326px;
+	height: 370px;
+	z-index: 3;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#final-info-p2{
+	position: absolute;
+	left: 797px;
+	top: 518px;
+	width: 326px;
+	height: 370px;
+	z-index: 2;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+}
+#loading-container-p2 {
+	position: absolute;
+	left: 797px;
+	top: 518px;
+	width: 326px;
+	height: 370px;
+	z-index: 3;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#final-info-p3{
+	position: absolute;
+	left: 1363px;
+	top: 518px;
+	width: 326px;
+	height: 370px;
+	z-index: 2;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+}
+#loading-container-p3 {
+	position: absolute;
+	left: 1363px;
+	top: 518px;
+	width: 326px;
+	height: 370px;
+	z-index: 3;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 .raceversus {
 	position:absolute;
 	left: 725px;
