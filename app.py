@@ -32,7 +32,6 @@ def layout():
     funFacts = race_data[7].split('.')[:-1]
     #print(funFacts)
 
-    racename = race_data[0]
     runnernames = [f"({runners_values[i][1]}) {runners_values[i][0]}" for i in range(3)]
     if all(r[23] == "US" for r in runners_values):
         flags = [get_state_flag_url(runners_values[i][24]) for i in range(3)]
@@ -64,7 +63,28 @@ def layout():
 
     carousel_runners, carousel_items, fun_facts = generate_carousel_items(race_data[0], sorted_runners, delta_data, sorted_pbs, sorted_imprs, interval_data, sorted_bpts, sorted_sobs, funFacts)
 
-    return render_template('layout_3P_race.html', spreadsheet_id = spreadsheet_id, automarathon_host = automarathon_host, racename = racename, runnerdata = runnerdata, carousel_runners=carousel_runners, carousel_items = carousel_items, fun_facts = fun_facts)
+    return render_template('layout_3P_race.html', spreadsheet_id = spreadsheet_id, automarathon_host = automarathon_host, runnerdata = runnerdata, carousel_runners=carousel_runners, carousel_items = carousel_items, fun_facts = fun_facts)
+
+
+@app.route('/opener')
+def opener():
+    spreadsheet_id = request.args.get('spreadsheet_id')
+    if spreadsheet_id is None:
+        # Render a template with the error message
+        return render_template('error.html', message='Please provide a valid spreadsheet_id')
+    automarathon_host = request.args.get('automarathon_host')
+    race_data, runners_values = get_race_information(spreadsheet_id)
+    
+    racename = race_data[0]
+    runnernames = [f"({runners_values[i][1]}) {runners_values[i][0]}" for i in range(3)]
+    if all(r[23] == "US" for r in runners_values):
+        flags = [get_state_flag_url(runners_values[i][24]) for i in range(3)]
+    else:
+        flags = [get_country_flag_url(runners_values[i][23]) for i in range(3)]
+    runnerdata = {'runnernames': runnernames,'flags': flags}
+
+    return render_template('opener.html', spreadsheet_id = spreadsheet_id, automarathon_host = automarathon_host, racename = racename, runnerdata = runnerdata)
+
 
 @app.route('/recheck_data_new')
 def recheck_data_new():
@@ -160,8 +180,6 @@ def check_final():
             results.append('')
             text_colors.append('')
     final_times = [format_milliseconds(final_time) for final_time in final_times]
-    print(final_times)
-    print(results)
     return jsonify({'final_times' : final_times, 'results': results, 'text_colors' : text_colors})
 
 @app.route('/recheck_data')

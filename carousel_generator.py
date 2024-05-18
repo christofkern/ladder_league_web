@@ -38,9 +38,9 @@ def generate_carousel_items(racename, sorted_runners, delta_data, sorted_pbs, so
                                         <b>{racename}</b>
                                     </div>
                                     <div class='pt-3 carousel-commands'>                                        
-                                        <b>!runners !discord !tech</b>
+                                        <b>!bracket !runners !discord !tech</b>
                                         <br>
-                                        <b>!schedule !predictions</b>
+                                        <b>!schedule !predictions </b>
                                     </div>
                                 </div>
                             </div>

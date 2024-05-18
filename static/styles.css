@@ -10,19 +10,6 @@
     src: url('fonts/Rubik-Medium.ttf') format('truetype');
 }
 
-.racename-bg{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.racename{
-    font-family: 'Rubik-Bold';
-    color:#cacacb;
-    font-size: 65px;
-}
 
 .runnername {
     position: absolute;
@@ -59,6 +46,7 @@
 }	
 
 
+
 .layout {
 	background-image: url('images/Ladder_League_3Person.png');
 	width: 1920px;
@@ -69,6 +57,44 @@
 	left:0px;
 	top:0px;
 }
+
+.opener{	
+	background-image: url('images/Ladder_League_StartingSoon.jpg');
+	width: 1920px;
+	height: 1080px;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	position:absolute;
+	left:0px;
+	top:0px;	
+}
+
+
+.racetitle {
+	font-family: 'Rubik-Bold';
+	color:#cacacb;
+	font-size: 95px;
+	padding-bottom: 20px;
+}
+	
+
+.raceversus {
+	position:absolute;
+	left: 725px;
+	top: 215px;
+	width: 930px;
+	height: 704px;
+	font-family: 'Rubik-Bold';
+		color:#cacacb;
+}
+	
+.raceparticipants {
+	font-size: 55px;
+	margin: 2px;
+	width: 1800px !important
+}
+
+
 .statistics {
 	display: flex;
 	position: absolute;

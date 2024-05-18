@@ -59,15 +59,17 @@ def get_final_times(raceid, runners):
     data = response.json()
     result = data["result"]
     participants = result["participants"]
-    final_times = []
-    for runner in runners:
-        for participant in participants:
+    final_times = [1e8,1e8,1e8]
+    
+    for participant in participants:
+        for idx, runner in enumerate(runners):
             if (participant["user"].lower() == runner.lower()):
-                finalTime = participant["finalTime"]                
+                finalTime = participant["finalTime"]
                 if (finalTime is not None):
-                    final_times.append(finalTime)
-                else:
-                    final_times.append(1e8)
+                    final_times[idx] = finalTime
+                    break               
+            
+
     return final_times
 
 def get_position(race_id, final_time):
