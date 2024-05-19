@@ -126,7 +126,7 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
 
     runners = [deltas[i][0] for i in range(len(deltas))]
     deltas = [deltas[i][1] for i in range(len(deltas))]
-    deltas = [format_delta(item) if isinstance(item, float) else item for item in deltas]
+    deltas = [format_delta(item) if isinstance(item, float) else item[1] for item in deltas]
     return deltas, runners
 
 
