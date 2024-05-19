@@ -29,20 +29,19 @@ def get_level_gold(runner, levels):
 
 
 def delta_sort(item):
-    if item == 'LEADER':
-        return (0, float('inf')) 
-    if item == '-':
+    if item[1] == '-':
         return (2, float('inf')) 
+    if item[1] == 'LEADER':
+        return (0, float('inf'))     
     else:
-        return (1, item)  
+        return (1, item[1])  
 
 
 
 def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
     #print(runners)
 
-    deltas = ['-','-','-']
-    sorted_runners = runners.copy()
+    deltas = [(runners[0],'-'),(runners[1],'-'),(runners[2],'-')]
 
     ENDPOINT = f"https://races.therun.gg/{race_id}/messages"
 
@@ -92,7 +91,7 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
             splitset = runner_splits[runner]
             if (len(splitset) == most_splits):#on the same split, calculate delta between times
                 delta = splitset[0][1] - fastest_splittime
-                deltas[idx] = delta
+                deltas[idx] = (runner,delta)
             elif (len(splitset) == 0): #runner not found in race, maybe prerecorded or rungg integration not working
                 pass
             else: #pull golds for the missing levels and add that to the last existing time
@@ -112,37 +111,22 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
                     delta = delta + parse_time_to_milliseconds(golds[most_splits - i - 1])
                 if (delta < 0):
                     delta = 1
-                deltas[idx] = delta
+                deltas[idx] = (runner,delta)
         else:
-            deltas[idx] = "LEADER"
+            deltas[idx] = (runner,"LEADER")
 
-    second_best_time = float('inf')
-    for idx, delta in enumerate(deltas):
-        
-        if (delta == "LEADER"):            
-            sorted_runners[0] = runners[idx]
-        else:
-            if (delta == '-'):
-                sorted_runners[2] = runners[idx]
-            elif (delta < second_best_time):
-                second_best_time = delta
-                if (sorted_runners[2] != '-'):
-                    sorted_runners[2] = sorted_runners[1]
-                sorted_runners[1] = runners[idx]
-            else:
-                sorted_runners[2] = runners[idx]
     
-    #sort deltas
+    #sort by deltas
     deltas = sorted(deltas, key=delta_sort)
     if (interval):
-        deltas[0] = "INTERVAL"
-        if (deltas[2] != '-'):
+        deltas[0] = (runner,"INTERVAL")
+        if (deltas[2][1] != '-'):
             deltas[2] = deltas[2] - deltas[1]
-    #format deltas
+
+    runners = [deltas[i][0] for i in range(len(deltas))]
+    deltas = [deltas[i][1] for i in range(len(deltas))]
     deltas = [format_delta(item) if isinstance(item, float) else item for item in deltas]
-    #print(sorted_runners)
-    sorted_runners[2] = "thenzota"
-    return deltas, sorted_runners
+    return deltas, runners
 
 
 if __name__ == '__main__':

@@ -130,8 +130,8 @@ def recheck_data_new():
     delta_data, sorted_runners_rungg = get_delta_times(race_data[1], spreadsheet_id, runners)
     interval_data, _ = get_delta_times(race_data[1], spreadsheet_id, runners, True)
     #map rungg from sorted runners back to their display names
-    runner_display_names = {runner[4]: f"{runner[0]}" for runner in runners_values}
-    sorted_runners = [runner_display_names[runner_id] for runner_id in sorted_runners_rungg]
+    runner_display_names = {runner[4].upper(): f"{runner[0]}" for runner in runners_values}
+    sorted_runners = [runner_display_names[runner_id.upper()] for runner_id in sorted_runners_rungg]
 
     runner_pb_data = {runner[0]: f"{runner[12]}" for runner in runners_values}
     sorted_pbs = [runner_pb_data[runner_id] for runner_id in sorted_runners]
