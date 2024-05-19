@@ -109,7 +109,7 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
                 
                 for i in range (most_splits - len(splitset)):
                     #print(f"adding gold: {golds[most_splits - i - 2]}")
-                    delta = delta + parse_time_to_milliseconds(golds[most_splits - i - 2])
+                    delta = delta + parse_time_to_milliseconds(golds[most_splits - i - 1])
                 if (delta < 0):
                     delta = 1
                 deltas[idx] = delta
