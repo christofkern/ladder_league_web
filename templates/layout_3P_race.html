@@ -266,6 +266,16 @@ function removeFunFact(){
     });
 }
 
+function activateOverlay(index, final_times, results, colors){
+    let overlay = document.getElementsByClassName('overlay-p' + (index+1))[0];
+    let overlay_text = document.getElementById('overlay-p' + (index+1));
+    
+    overlay.classList.remove('invisible');
+    overlay_text.innerHTML = final_times[index] + '<br>' + results[index]
+    overlay_text.style.color = colors[index]
+}
+
+
 function updateOverlays(){
     fetch('/check_final?spreadsheet_id=' + encodeURIComponent(s_id))
         .then(response => response.json())
@@ -276,12 +286,9 @@ function updateOverlays(){
             
             final_times.forEach((item,index) => {
                 if (item != '27:46:40'){
-                    let overlay = document.getElementsByClassName('overlay-p' + (index+1))[0];
-                    let overlay_text = document.getElementById('overlay-p' + (index+1));
-                    
-                    overlay.classList.remove('invisible');
-                    overlay_text.innerHTML = final_times[index] + '<br>' + results[index]
-                    overlay_text.style.color = colors[index]
+                    setTimeout(() => {
+                        activateOverlay(index, final_times, results, colors);
+                    }, 30000);
                 }
                 else{
                     let overlay = document.getElementsByClassName('overlay-p' + (index+1))[0];
