@@ -82,6 +82,7 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
             fastest_runner = runner
 
     if (all_on_first):
+        deltas = [deltas[i][1] for i in range(len(deltas))]
         return deltas, runners    
     #print(fastest_runner)
 
@@ -118,7 +119,6 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
     
     #sort by deltas
     deltas = sorted(deltas, key=delta_sort)
-    print(deltas)
     if (interval):
         deltas[0] = (runner,"INTERVAL")
         if (deltas[2][1] != '-'):
@@ -126,7 +126,7 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
 
     runners = [deltas[i][0] for i in range(len(deltas))]
     deltas = [deltas[i][1] for i in range(len(deltas))]
-    deltas = [format_delta(item) if isinstance(item, float) else item[1] for item in deltas]
+    deltas = [format_delta(item) if isinstance(item, float) else item for item in deltas]
     return deltas, runners
 
 
