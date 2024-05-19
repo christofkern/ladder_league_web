@@ -110,7 +110,7 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
                     #print(f"adding gold: {golds[most_splits - i - 2]}")
                     delta = delta + parse_time_to_milliseconds(golds[most_splits - i - 1])
                 if (delta < 0):
-                    delta = 1
+                    delta = 1000
                 deltas[idx] = (runner,delta)
         else:
             deltas[idx] = (runner,"LEADER")
@@ -118,10 +118,11 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
     
     #sort by deltas
     deltas = sorted(deltas, key=delta_sort)
+    print(deltas)
     if (interval):
         deltas[0] = (runner,"INTERVAL")
         if (deltas[2][1] != '-'):
-            deltas[2][1] = deltas[2][1] - deltas[1][1]
+            deltas[2] = (deltas[2][0], deltas[2][1] - deltas[1][1])
 
     runners = [deltas[i][0] for i in range(len(deltas))]
     deltas = [deltas[i][1] for i in range(len(deltas))]
