@@ -35,6 +35,7 @@ def layout():
     runnernames = [f"({runners_values[i][1]}) {runners_values[i][0]}" for i in range(3)]
     if all(r[23] == "US" for r in runners_values):
         flags = [get_state_flag_url(runners_values[i][24]) for i in range(3)]
+        flags = [get_country_flag_url(runners_values[i][23]) for i in range(3)]
     else:
         flags = [get_country_flag_url(runners_values[i][23]) for i in range(3)]
     runnerdata = {'runnernames': runnernames,'flags': flags}
