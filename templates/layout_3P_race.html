@@ -163,7 +163,7 @@ function setRunners(){
 
 function setCarousel(runnerHTML, carouselItemsHTML){	
     let index = getActiveCarouselIndex()
-    if (index === -1){
+    if (index === -1 || index > 6){
         index = 0
     }
     document.getElementById("carouselExampleSlidesOnly").innerHTML = '<div class="carousel-inner" id="carousel-inner"> </div>'    
