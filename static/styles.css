@@ -358,7 +358,7 @@
     left: 115px;
     width: 838px;
     height: 467px;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 0.95);
 }
 .overlay-p2 {
     position: absolute;
@@ -366,7 +366,7 @@
     left: 967px;
     width: 838px;
     height: 467px;
-    background-color: rgba(0, 0, 0, 0.85); 
+    background-color: rgba(0, 0, 0, 0.95); 
 }
 
 .overlay-p3 {
@@ -375,7 +375,7 @@
     left: 115px;
     width: 838px;
     height: 467px;
-    background-color: rgba(0, 0, 0, 0.85); 
+    background-color: rgba(0, 0, 0, 0.95); 
 }
 
 .overlay-text {

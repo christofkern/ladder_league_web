@@ -178,29 +178,29 @@ def check_final():
             if (position != 0):
                 if (isQualifier and (position == 1 or (position == 2 and len(runners_values) == 3))):
                     results.append("QUALIFIED")
-                    text_colors.append("#337357")
+                    text_colors.append("#00ff15")
                 elif (isQualifier):
                     if (len(runners_values) == 2):
                         results.append("RUNNER-UP")
-                        text_colors.append("#FFD23F")
+                        text_colors.append("#ff9500")
                     else:   
                         results.append("ELIMINATED")
-                        text_colors.append("#EE4266")
+                        text_colors.append("#ff0040")
                 elif (isTopRung and position == 1):
                     results.append("QUALIFIED")
-                    text_colors.append("#337357")
+                    text_colors.append("#00ff15")
                 elif (isTopRung and position == 2):
                     results.append("RUNNER-UP")
-                    text_colors.append("#FFD23F")
+                    text_colors.append("#ff9500")
                 elif (not isTopRung and (position == 1 or (position == 2 and not isBottomRung ))):
                     results.append("PROMOTED")
-                    text_colors.append("#337357")
+                    text_colors.append("#00ff15")
                 elif (isBottomRung):
                     results.append("ELIMINATED")
-                    text_colors.append("#EE4266")
+                    text_colors.append("#ff0040")
                 else:
                     results.append("DEMOTED")
-                    text_colors.append("#5E1675")
+                    text_colors.append("#6a00ff")
             else:
                 results.append('')
                 text_colors.append('')  

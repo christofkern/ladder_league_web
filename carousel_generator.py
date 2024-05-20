@@ -32,7 +32,7 @@ def generate_carousel_items(racename, sorted_runners, delta_data, sorted_pbs, so
 
         if (stat == "TITLE"):
             carousel_items += f'''
-                             <div class='carousel-item active'>
+                             <div id='{idx}' class='carousel-item active'>
                                 <div class='container' >
                                     <div class='pt-4 carousel-header'>
                                         <b>{racename}</b>
@@ -47,7 +47,7 @@ def generate_carousel_items(racename, sorted_runners, delta_data, sorted_pbs, so
                             '''
         else:    
             carousel_items += f'''
-            <div class='carousel-item'>
+            <div id='{idx}' class='carousel-item'>
                 <div class='container' >
                     <div class='row pt-4 carousel-header'>
                         <b>{stat.upper()}</b>
