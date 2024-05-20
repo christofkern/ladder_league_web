@@ -170,12 +170,13 @@ def check_final():
     
     results = []
     text_colors = []
-
+    
     final_times = get_final_times(race_id, runner_runggs)
     for final_time in final_times:    
         if (final_time != 1e8):
             position = get_position(race_id, final_time)
             if (position != 0):
+                #consider doing pending when not everyone is finished??
                 if (isQualifier and (position == 1 or (position == 2 and len(runners_values) == 3))):
                     results.append("QUALIFIED")
                     text_colors.append("#00ff15")

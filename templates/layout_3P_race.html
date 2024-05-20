@@ -161,15 +161,26 @@ function setRunners(){
 	}
 }
 
-function setCarousel(runnerHTML, carouselItemsHTML){		
+function setCarousel(runnerHTML, carouselItemsHTML){	
+    let index = getActiveCarouselIndex()
+    if (index === -1){
+        index = 0
+    }
     document.getElementById("carouselExampleSlidesOnly").innerHTML = '<div class="carousel-inner" id="carousel-inner"> </div>'    
     document.getElementById("carousel-inner").innerHTML = carouselItemsHTML;   
 	document.getElementById("carouselExampleSlidesOnly").innerHTML += runnerHTML;
+    document.getElementById('0').classList.remove('active') 
+    document.getElementById('' + index).classList.add('active') 
+
+    if(index >= 1 && index <= 6){
+        fixateRunners();
+    }
+
+
 }
 
 
 function updateCarousel() {
-    setTimeout(updateCarousel, 12000);
     fetch('/recheck_data_new?spreadsheet_id=' + encodeURIComponent(s_id))
         .then(response => response.json())
         .then(data => {             
@@ -305,7 +316,7 @@ function updateOverlays(){
 
 setCommentators([]);
 setRunners();
-setTimeout(updateCarousel, 12000); //this needs to be synced to the carousel
+setInterval(updateCarousel, 12000); //this needs to be synced to the carousel
 setInterval(updateOverlays, 15000);
 updateOverlays();
 
