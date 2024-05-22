@@ -6,6 +6,7 @@ from flags import get_state_flag_url, get_country_flag_url
 from get_final_time import get_final_time, format_milliseconds, get_position, get_best_time, get_average_time, get_final_times
 from get_delta_times import get_delta_times
 from carousel_generator import generate_carousel_items
+from time import sleep
 
 app = Flask(__name__, static_folder='static')
 
@@ -80,6 +81,7 @@ def opener():
     runnernames = [f"({runners_values[i][1]}) {runners_values[i][0]}" for i in range(3)]
     if all(r[23] == "US" for r in runners_values):
         flags = [get_state_flag_url(runners_values[i][24]) for i in range(3)]
+        flags = [get_country_flag_url(runners_values[i][23]) for i in range(3)]
     else:
         flags = [get_country_flag_url(runners_values[i][23]) for i in range(3)]
     runnerdata = {'runnernames': runnernames,'flags': flags}
@@ -101,6 +103,7 @@ def summary():
     runnernames = [f"({runners_values[i][1]}) {runners_values[i][0]}" for i in range(3)]
     if all(r[23] == "US" for r in runners_values):
         flags = [get_state_flag_url(runners_values[i][24]) for i in range(3)]
+        flags = [get_country_flag_url(runners_values[i][23]) for i in range(3)]
     else:
         flags = [get_country_flag_url(runners_values[i][23]) for i in range(3)]
     runnerdata = {'runnernames': runnernames,'flags': flags}
@@ -233,9 +236,10 @@ def post_race_info():
     isTopRung = race_info[4] == "True"
     isBottomRung = race_info[5] == "True"
     isQualifier = race_info[6] == "True"
-    
 
     final_time = get_final_time(race_id, runner_rungg)
+
+    
     final_time_icon = "https://drive.google.com/thumbnail?id=15ubkMalyP-rHUkO4NVe14sTrip34-jO3"
     if (final_time != 1e8):
         position = get_position(race_id, final_time)        
@@ -268,6 +272,7 @@ def post_race_info():
         best_time = get_best_time(final_time, runners_values[int(runner)][1])
         average_time = get_average_time(final_time, runners_values[int(runner)][1])
         final_time = format_milliseconds(final_time)
+        
     else:
         record = ""
         best_time = ""
@@ -275,6 +280,7 @@ def post_race_info():
         final_time = ""
         record_string = ""
 
+    
     return jsonify({"final_time": final_time, "final_time_icon": final_time_icon, "record" : record_string, "best_time" : best_time, "average_time" : average_time })
 
 

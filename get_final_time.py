@@ -91,8 +91,8 @@ def get_position(race_id, final_time):
     return final_times.index(final_time) + 1
 
 def get_best_time(final_time, seed):
-    delay = random.randint(1, 15)
-    time.sleep(delay)
+    #delay = random.randint(1, 10)
+    #time.sleep(delay / 0.5)
 
     spreadsheet_id = "1i4DUK9SuWknyS1QW2MXGchRZ4s1cu44CSrNRUP03tvY"
     RANGE_NAME = RANGE_NAME = f'Runners!I{int(seed)+1}'
@@ -103,18 +103,18 @@ def get_best_time(final_time, seed):
     #Retrieve current value from the spreadsheet
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheet_id, range=RANGE_NAME).execute()
-    current_value =  result.get('values', [])[0][0]
+    current_value =  result.get('values', [])[0][0][1:-1].split(",")
 
     lowest_time = final_time
     for value in current_value:
-        value = parse_time_to_milliseconds(value[1:-1])
+        value = parse_time_to_milliseconds(value)
         if (value < lowest_time):
             lowest_time = value   
     return format_milliseconds(lowest_time)
 
 def get_average_time(final_time, seed):
-    delay = random.randint(1, 15)
-    time.sleep(delay)
+    #delay = random.randint(1, 10)
+    #time.sleep(delay / 0.5)
 
     spreadsheet_id = "1i4DUK9SuWknyS1QW2MXGchRZ4s1cu44CSrNRUP03tvY"
     RANGE_NAME = RANGE_NAME = f'Runners!I{int(seed)+1}'
