@@ -353,7 +353,7 @@ def runnername():
     #check if all country codes are the US, country code is index 21
     print(runners_values)
     if all(r[23] == "US" for r in runners_values):
-        return render_template('runnername_state.html', text_content = f"({runners_values[int(runner)][1]}) {runners_values[int(runner)][0]}", state_flag_url = get_state_flag_url(runners_values[int(runner)][24]))
+        return render_template('runnername_state.html', text_content = f"({runners_values[int(runner)][1]}) {runners_values[int(runner)][0]}", state_flag_url = get_country_flag_url(runners_values[int(runner)][23]))
     else:
         return render_template('runnername_country.html', text_content = f"({runners_values[int(runner)][1]}) {runners_values[int(runner)][0]}", country_code = get_country_flag_url(runners_values[int(runner)][23]))
 
