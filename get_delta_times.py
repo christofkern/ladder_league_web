@@ -111,7 +111,7 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
                     #print(f"adding gold: {golds[most_splits - i - 2]}")
                     delta = delta + parse_time_to_milliseconds(golds[most_splits - i - 2])
                 if (delta < 0):
-                    delta = 1000
+                    delta = format_delta(1000)
                 deltas[idx] = (runner,delta)
         else:
             deltas[idx] = (runner,"LEADER")
