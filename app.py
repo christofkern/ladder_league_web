@@ -190,7 +190,7 @@ def check_final():
                 elif (isTopRung and position == 1):
                     results.append("QUALIFIED")
                     text_colors.append("#00ff15")
-                elif (isTopRung and position == 2):
+                elif (isTopRung and not isBottomRung and position == 2):
                     results.append("RUNNER-UP")
                     text_colors.append("#ff9500")
                 elif (not isTopRung and (position == 1 or (position == 2 and not isBottomRung ))):
@@ -248,7 +248,7 @@ def post_race_info():
                 final_time_icon = "https://drive.google.com/thumbnail?id=16-wst51zvLrZ-hpxyeD68qRsfABBtB_y"
         elif (isTopRung and position == 1):
             final_time_icon = "https://drive.google.com/thumbnail?id=16-lBbCrLgAG5u3L5f2mRESTu6ONzMy6A"
-        elif (isTopRung and position == 2):
+        elif (isTopRung and not isBottomRung and position == 2):
             final_time_icon = "https://drive.google.com/thumbnail?id=15yd1Sae7tB9OZLQgHMU56ROl2ZQCYnvb"
         elif (not isTopRung and (position == 1 or position == 2)):
             if (position == 1):
