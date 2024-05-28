@@ -1,4 +1,5 @@
 import requests
+from get_final_time import format_milliseconds
 
 def isEmpty(dictionary):
     for element in dictionary:
@@ -6,15 +7,7 @@ def isEmpty(dictionary):
             return True
         return False
 
-def format_milliseconds(total_milliseconds):
-    if isinstance(total_milliseconds, str):
-        total_milliseconds = float(total_milliseconds)
-    total_seconds = total_milliseconds / 1000  # Convert milliseconds to seconds
-    hours = int(total_seconds // 3600)
-    minutes = int((total_seconds % 3600) // 60)
-    seconds = int(total_seconds % 60)
-    formatted_time = f"{hours:02}:{minutes:02}:{seconds:02}"
-    return formatted_time
+
 
 def get_runner_sob(runner):
     response = requests.get(f"https://therun.gg/api/users/{runner}/")
