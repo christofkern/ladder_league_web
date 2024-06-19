@@ -122,7 +122,7 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
         else:
             deltas[idx] = (runner,"LEADER")
 
-    print(deltas)
+    #print(deltas)
     #sort by deltas
     deltas = sorted(deltas, key=delta_sort)
     if (interval):

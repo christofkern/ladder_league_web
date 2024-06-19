@@ -316,7 +316,10 @@ function updateOverlays(){
 
 setCommentators([]);
 setRunners();
-setInterval(updateCarousel, 12000); //this needs to be synced to the carousel
+setTimeout(() => {
+    setInterval(updateCarousel, 12000);
+}, 2000);
+ //this needs to be synced to the carousel
 setInterval(updateOverlays, 15000);
 updateOverlays();
 
