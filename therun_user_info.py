@@ -36,8 +36,10 @@ def get_runner_sob(runner):
             if (gamedata["gameTimeData"] is not None):  
                 #use loadless if available		 
                 sob = gamedata["gameTimeData"]["sumOfBests"]
-                if (float(sob) < sw_sob):
-                    sw_sob = float(sob)    
+            if (sob == ""):
+                sob = float('inf')
+            if (float(sob) < sw_sob):
+                sw_sob = float(sob)    
     return format_milliseconds(sw_sob)
 
 
