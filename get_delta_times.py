@@ -94,7 +94,8 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
                 delta = splitset[0][1] - fastest_splittime
                 deltas[idx] = (runner,delta)
             elif (len(splitset) == 0): #runner not found in race, maybe prerecorded or rungg integration not working
-                pass
+                #print("Passing")
+                continue
             else: #pull golds for the missing levels and add that to the last existing time
                 RUNNERS_RANGE_NAME = 'Runners!Z2:Z5'
                 creds = get_credentials()
@@ -104,19 +105,24 @@ def get_delta_times(race_id, spreadsheet_id, runners, interval = False):
 
                 runners_result = race_sheet.values().get(spreadsheetId=spreadsheet_id,range=RUNNERS_RANGE_NAME).execute()
                 golds = ast.literal_eval(runners_result.get('values', [])[idx][0])
-
+                if (len(golds)==0):                    
+                    continue
                 delta = splitset[0][1] - fastest_splittime
                 
                 for i in range (most_splits - len(splitset)):
-                    #print(f"adding gold: {golds[most_splits - i - 2]}")
-                    delta = delta + parse_time_to_milliseconds(golds[most_splits - i - 2])
+                    
+                   # print(f"adding gold: {golds[most_splits - i - 2]}")
+                    
+                    if (len(golds) > most_splits - i - 3):
+                        delta = delta + parse_time_to_milliseconds(golds[most_splits - i - 2])
+                    
                 if (delta < 0):
                     delta = format_delta(1000)
                 deltas[idx] = (runner,delta)
         else:
             deltas[idx] = (runner,"LEADER")
 
-    
+    print(deltas)
     #sort by deltas
     deltas = sorted(deltas, key=delta_sort)
     if (interval):
