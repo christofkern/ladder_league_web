@@ -3,13 +3,14 @@ from flask import Flask, render_template, send_from_directory, request, jsonify
 from get_race_information import get_race_information
 from flags import get_country_flag_url
 from local_overrides import LocalRunnerData
+from get_delta_times import get_delta_times
+from get_golds import get_golds
 
 
 
 
 app = Flask(__name__, static_folder='static')
-
-
+localOverrides = {}
 
 #these are the pages that can be rendered
 @app.route('/intro')
@@ -50,22 +51,34 @@ def runnerstwitch():
         data.append(runner_dict)
     return data
 
+
+
 #this gets called once when the layout is loaded, if a change is happening, the source would need to be refreshed, which will give a flickering white screen for a second
 @app.route('/static_info')
-def racename():
+def static_info():
     spreadsheet_id = request.args.get('spreadsheet_id')
-    if spreadsheet_id is None:
+    #check validity of spreadsheet_id
+    spreadsheet_valid = True
+    try:
+        race_info, runners_values = get_race_information(spreadsheet_id)
+    except:  # noqa: E722
+        spreadsheet_valid = False      
+    if (spreadsheet_id not in localOverrides and not spreadsheet_valid):
         # Render a template with the error message
-        return render_template('error.html', message='Please provide a valid spreadsheet_id')
-    
+        return jsonify({'error':'Please provide a valid spreadsheet_id or override something with this id'})
+
+    if (spreadsheet_id not in localOverrides):
+        localOverrides[spreadsheet_id] = LocalRunnerData()
+
+    localRunnerData = localOverrides[spreadsheet_id]
     #if everything is overriden, dont consult the sheet
-    checkFile = not LocalRunnerData.everything_static_overriden()
+    checkFile = not localRunnerData.everything_static_overriden() 
     
-    racename = LocalRunnerData.race_name
-    runners = [runner_name for runner_name in LocalRunnerData.runner_names]
-    country_urls = [get_country_flag_url(country) for country in LocalRunnerData.runner_countries]
+    racename = localRunnerData.race_name
+    runners = [runner_name for runner_name in localRunnerData.runner_names]
+    country_urls = [get_country_flag_url(country) for country in localRunnerData.runner_countries]
     
-    if (checkFile):
+    if (checkFile and spreadsheet_valid):
         #only override what is on default value
         race_info, runners_values = get_race_information(spreadsheet_id)
         if (racename == ""):
@@ -84,10 +97,73 @@ def racename():
 
 @app.route('/runner_positions')
 def runner_positions():
-    pass
+    spreadsheet_id = request.args.get('spreadsheet_id')
+    #check validity of spreadsheet_id
+    spreadsheet_valid = True
+    try:
+        race_info, runners_values = get_race_information(spreadsheet_id)
+    except:  # noqa: E722
+        spreadsheet_valid = False      
+    if (spreadsheet_id not in localOverrides and not spreadsheet_valid):
+        # Render a template with the error message
+        return jsonify({'error':'Please provide a valid spreadsheet_id or override something with this id'})
+
+    if (spreadsheet_id not in localOverrides):
+        localOverrides[spreadsheet_id] = LocalRunnerData()
+
+    localRunnerData = localOverrides[spreadsheet_id]
+    #if therun is disabled, order the runners how they are in the spreadsheet/local override class
+    if (localRunnerData.therun):
+        return jsonify({'runner_positions':[1,2,3]})
+    #if therun is enabled, get the order from the race
+
+    #get race id
+    race_id = localRunnerData.therun_race_id
+    if (race_id == ""):
+        if not spreadsheet_valid:
+            return jsonify({'error':'please set a therun race id in overrides or use a valid google spreadsheet'})
+        race_id = race_info[1]            
+    
+    #get runner golds
+    runner_golds = localRunnerData.runner_gold_times
+
+    if spreadsheet_valid:  
+        golds = get_golds(spreadsheet_id)
+        for i in range(3):
+            if (runner_golds[i] == []):
+                runner_golds[i] = golds[i]
+
+    #get runners therungg
+    runner_runggs = localRunnerData.runner_runggs
+    if not spreadsheet_valid and "" in runner_runggs:
+        return jsonify({'error':'please set a therun id for all runners'})
+
+    
+
+    if spreadsheet_valid:
+        for i in range(3):
+            runner_runggs[i] = runners_values[i][4]
+
+    #reuse get delta times, as this sorts the runner array by who is in the lead
+    xd, sorted_runners_rungg = get_delta_times(race_id, runner_golds, runner_runggs)
+    #sort runners
+    print(xd)
+    print(sorted_runners_rungg)
+    if spreadsheet_valid:
+        runner_order = {runner[4].upper(): (idx+1) for idx,runner in enumerate(runners_values)}
+    else:
+        runner_order = {runner.upper(): (idx+1) for idx,runner in enumerate(runner_runggs)}
+    race_order = [runner_order[runner_id.upper()] for runner_id in sorted_runners_rungg]
+    return jsonify({'runner_positions':race_order})
+        
+        
+    
+    
+    
 
 #list what we need in the layout:
 # - race name
+# - therun race id
 # - runner names
 # - countries
 # - runner position
@@ -96,11 +172,12 @@ def runner_positions():
 # - runner bpt
 # - runner improvement since seeding
 # - runner pbs
-
+# - runner final time
 
 
 #list of overrides
 # - race name
+# - therun race id
 # - runner names
 # - countries
 # - rungg (if sheet is not working)
@@ -109,16 +186,17 @@ def runner_positions():
 # - runner pbs (if data in sheet is wrong or not there)
 # - runner improvement (same as above)
 # - toggle using therun, this would only show racename, sobs, pbs and improvement then
+# - runner final times
 
-localOverrides = {}
 @app.route('/override')
 def override_info():    
     spreadsheet_id = request.args.get('spreadsheet_id')
 
-    #try to get all request args: possible are race_name, names, countries, runggs, golds, sobs, pbs, improvements, override_therun
+    #try to get all request args: possible are race_name, therun_race_id, names, countries, runggs, golds, sobs, pbs, improvements, override_therun, final_times
+
     possible_args = [
-        'race_name', 'names', 'countries', 'runggs', 
-        'golds', 'sobs', 'pbs', 'improvements', 'override_therun'
+        'race_name', 'therun_race_id', 'names', 'countries', 'runggs', 
+        'golds', 'sobs', 'pbs', 'improvements', 'override_therun', 'final_times'
     ]
     
     # Initialize a dictionary to store the request arguments
@@ -130,6 +208,8 @@ def override_info():
     # Convert the dictionary values to individual variables (strings)
     if args['race_name']:
         localOverrides[spreadsheet_id].race_name = args['race_name']
+    if args['therun_race_id']:
+        localOverrides[spreadsheet_id].therun_race_id = args['therun_race_id']
     if args['names']:
         localOverrides[spreadsheet_id].runner_names = args['names'].split(',')
     if args['countries']:
@@ -146,6 +226,9 @@ def override_info():
         localOverrides[spreadsheet_id].override_runner_improvements_since_seeding = args['improvements'].split(',')
     if args['override_therun']:
         localOverrides[spreadsheet_id].override_therun = args['override_therun'].split(',')
+    if args['final_times']:
+        localOverrides[spreadsheet_id].runner_final_times = args['final_times'].split(',')
+    
 
     #for id in localOverrides:
     #    print(localOverrides[id].override_runner_sobs)
