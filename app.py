@@ -49,7 +49,7 @@ def runnerstwitch():
         data.append(runner_dict)
     return data
 
-#this gets called once when the layout is loaded
+#this gets called once when the layout is loaded, if a change is happening, the source would need to be refreshed, which will give a flickering white screen for a second
 @app.route('/static_info')
 def racename():
     spreadsheet_id = request.args.get('spreadsheet_id')
@@ -81,6 +81,10 @@ def racename():
 
 #this gets called every x seconds from the layouts
 
+@app.route('/runner_positions')
+def runner_positions():
+    pass
+
 #list what we need in the layout:
 # - race name
 # - runner names
@@ -92,7 +96,16 @@ def racename():
 # - runner improvement since seeding
 # - runner pbs
 
-
+#list of overrides
+# - race name
+# - runner names
+# - countries
+# - rungg (if sheet is not working)
+# - gold splits (if file download is not working)
+# - runner sobs (if therun not working)
+# - runner pbs (if data in sheet is wrong or not there)
+# - runner improvement (same as above)
+# - toggle using therun, this would only show racename, sobs, pbs and improvement then
 
 
 if __name__ == '__main__':
