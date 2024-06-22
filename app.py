@@ -25,10 +25,39 @@ def intro():
 @app.route('/layout')
 def layout_2P():
     spreadsheet_id = request.args.get('spreadsheet_id')
+    #check validity of spreadsheet_id
+    spreadsheet_valid = True
+    try:
+        race_info, runners_values = get_race_information(spreadsheet_id)
+    except:  # noqa: E722
+        spreadsheet_valid = False      
+    if (spreadsheet_id not in localOverrides and not spreadsheet_valid):
+        # Render a template with the error message
+        return render_template('error.html', message='Please provide a valid spreadsheet_id or override something with this id')
 
-    #depending on how many runners there are
-    return render_template('layout_2P.html')
-    return render_template('layout_3P.html')
+    if (spreadsheet_id not in localOverrides):
+        localOverrides[spreadsheet_id] = LocalRunnerData()
+
+    localRunnerData = localOverrides[spreadsheet_id]
+    
+    #find out it 2P or 3P layout is to be used
+    if spreadsheet_valid:
+        runner_amount = len(runners_values)        
+    else:
+        runner_amount = 0
+        for runner in localRunnerData.runner_names:
+            if (runner != ""):
+                runner_amount += 1
+
+    if runner_amount == 2:
+        return render_template('layout_2P.html', spreadsheet_id = spreadsheet_id)
+    elif runner_amount == 3:
+        return render_template('layout_3P.html', spreadsheet_id = spreadsheet_id)
+    else:
+        return render_template('error.html', message=f'There is no layout for {runner_amount} runner(s)')
+        
+
+    
 
 @app.route('/outro')
 def outro():
@@ -220,7 +249,6 @@ def override_info():
         localOverrides[spreadsheet_id].runner_runggs = args['runggs'].split(',')
     if args['golds']:
         localOverrides[spreadsheet_id].runner_gold_times = args['golds'].split(';')
-        print(localOverrides[spreadsheet_id].runner_gold_times)
     if args['sobs']:
         localOverrides[spreadsheet_id].runner_sobs = args['sobs'].split(',')
     if args['pbs']:
