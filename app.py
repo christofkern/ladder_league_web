@@ -2,13 +2,12 @@ from flask import Flask, render_template, send_from_directory, request, jsonify
 
 from get_race_information import get_race_information
 from flags import get_country_flag_url
-import ssl
+from local_overrides import LocalRunnerData
 
 
 
 
 app = Flask(__name__, static_folder='static')
-ssl._create_default_https_context = ssl._create_unverified_context
 
 
 #these are the pages that can be rendered
@@ -57,29 +56,42 @@ def racename():
     if spreadsheet_id is None:
         # Render a template with the error message
         return render_template('error.html', message='Please provide a valid spreadsheet_id')
-    race_info, runners_values= get_race_information(spreadsheet_id)
-    racename = race_info[0]
-    runners = [None] * len(runners_values)
+    
+    #if everything is overriden, dont consult the sheet
+    checkFile = not LocalRunnerData.everything_static_overriden()
+    
+    racename = LocalRunnerData.race_name
+    runners = [runner_name for runner_name in LocalRunnerData.runner_names]
+    country_urls = [get_country_flag_url(country) for country in LocalRunnerData.runner_countries]
+    
+    if (checkFile):
+        #only override what is on default value
+        race_info, runners_values = get_race_information(spreadsheet_id)
+        if (racename == ""):
+            racename = race_info[0]
+        for i in range(3):
+            if (runners[i] == ""):
+                runners[i] = f"({runners_values[i][1]}) {runners_values[i][0]}" 
+            if (country_urls[i] == ""):
+                country_urls[i] = get_country_flag_url(runners_values[i][23])
+    else:
+        print("Not checking file")    
 
-    for i in range(len(runners_values)):        
-        #check if all country codes are the US, country code is index 21
-        print(runners_values)
-        runners[i] = f"({runners_values[i][1]}) {runners_values[i][0]}" 
-        country_url = get_country_flag_url(runners_values[i][23])
-
-    return jsonify({'racename': racename}, {'runners': runners}, {'country_url': country_url})
+    return jsonify({'racename': racename}, {'runners': runners}, {'country_urls': country_urls})
 
 #this gets called every x seconds from the layouts
 
-#list what we need:
+#list what we need in the layout:
+# - race name
+# - runner names
+# - countries
 # - runner position
 # - runner split times
 # - runner sob
+# - runner bpt
+# - runner improvement since seeding
+# - runner pbs
 
-
-#overrides (with bot commands?)
-# - final time
-# - ignore runner
 
 
 
