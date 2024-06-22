@@ -62,8 +62,6 @@ def get_delta_times(race_id, golds, runners, interval = False):
 
 
     for idx,runner in enumerate(runner_splits):
-        runner_golds = golds[idx]
-        print(runner_golds)
         if (runner != fastest_runner):
             
             splitset = runner_splits[runner]

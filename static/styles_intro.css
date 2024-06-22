@@ -1,0 +1,70 @@
+
+@font-face{
+    font-family:'Rubik-Bold';
+    src: url('fonts/Rubik-Bold.ttf') format('truetype');
+}
+
+
+@font-face{
+    font-family:'Rubik-Medium';
+    src: url('fonts/Rubik-Medium.ttf') format('truetype');
+}
+
+
+.intro{	
+	background-image: url('images/Ladder_League_StartingSoon.jpg');
+	width: 1920px;
+	height: 1080px;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	position:absolute;
+	left:0px;
+	top:0px;	
+}
+
+#name1 {	
+	left: 115px;
+	top: 467px;
+	width: 838px;
+	height: 66px;	
+}
+#name2 {	
+	left: 967px;
+	top: 467px;
+	width: 838px;
+	height: 66px;
+}
+#name3 {
+	left: 115px;
+	top: 1014px;
+	width: 838px;
+	height: 66px;
+}
+
+
+.racetitle {
+	font-size: 95px;
+	padding-bottom: 20px;
+}
+
+.raceversus {
+	position:absolute;
+	left: 725px;
+	top: 215px;
+	width: 930px;
+	height: 704px;
+	font-family: 'Rubik-Bold';
+	color:#cacacb;
+}	
+	
+.raceparticipants {
+	font-size: 55px;
+	margin: 2px;
+	width: 1800px !important
+}
+
+.container{
+	width:100%;
+	text-align: center;
+	color:#cacacb;
+}

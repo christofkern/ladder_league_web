@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+<body class="layout" width=1920px height=1080px>
+<div id="name1" class="runnername">
+(x) RUNNER 1
+</div>
+<div id="name2" class="runnername">
+(y) RUNNER 2
+</div>
+<div id="name3" class="runnername">
+(z) RUNNER 3
+</div>
+<div class="statistics">
+    
+<!--
+</div>
+    <div class="commentators">
+        <div class="block" style="height: 100%;">            
+            <div class="centered" id="cbox">
+                <div class="child">
+                    P53
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+<div class="timer" id="main_timer">
+   
+00:00:00
+</div>
+ -->
+</body>
+
+
+<div class="overlay-p1 invisible">       
+    <p id="overlay-p1" class="overlay-text"></p>    
+</div>
+
+<div class="overlay-p2 invisible">       
+    <p id="overlay-p2"  class="overlay-text"></p>    
+</div>
+
+<div class="overlay-p3 invisible">       
+    <p id="overlay-p3" class="overlay-text"></p>    
+</div>
+
+
+
+
+<script>
+
+
+var carouselItemsHTML = `{{ carousel_items | safe }}`;
+var carouselRunnersHTML = `{{ carousel_runners | safe }}`;
+let s_id = "{{spreadsheet_id}}";
+
+function toTime(totalMillis, showDecimal=false, precision=2) {
+    const millis = Math.floor(totalMillis%1000);
+    const totalSeconds = Math.floor(totalMillis / 1000)
+    const totalMinutes = Math.floor(totalSeconds / 60);
+
+    const seconds = totalSeconds % 60;
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    var timeOut = "";
+    if(hours > 0){
+        timeOut += hours.toString().padStart(2,'0') + ":";
+    }else{
+        timeOut += hours.toString().padStart(2,'0') + ":";
+    }
+
+    if(hours == 0 && minutes == 0){
+        timeOut += "00:";
+    }else if (hours > 0 && minutes == 0){
+        timeOut += "00:";
+    }else if(minutes > 0){
+        timeOut += minutes.toString().padStart(2,'0') + ":";
+    }
+
+    if(seconds > 0){
+        timeOut += seconds.toString().padStart(2,'0');
+    }else if (hours > 0 || minutes > 0){
+        timeOut += "00";
+    }else{
+        timeOut += "00";
+    }
+
+    if(showDecimal){
+        timeOut += "."+(millis.toString().padStart(precision, '0').substring(0,precision));
+    }
+
+    return timeOut;
+}
+
+function arraysMatch(arr1, arr2) {
+    // Check if arrays have the same length
+    if (arr1.length !== arr2.length) {
+        return false;
+    }
+
+    // Iterate through each array element and compare
+    for (let i = 0; i < arr1.length; i++) {
+        for (let j = 0; j < arr1[i].length; j++) {
+        // If any element is different, arrays don't match
+        if (arr1[i][j] !== arr2[i][j]) {
+            return false;
+        }
+        }
+    }
+
+    // If all elements are the same, arrays match
+    return true;
+}
+function setCommentators(names){
+	var len = 0;
+	for(name of names){
+		len = Math.max(len,name.length);
+	}
+	var fontsize = 45;
+	var fontsize2 = fontsize-Math.min(Math.max(0,len-3)*1.8,41);
+	var fontsize3 = fontsize-Math.min(Math.max(0,names.length-3)*8,41);
+	fontsize = Math.min(fontsize2,fontsize3);
+	
+	commentatorBox = document.getElementById("cbox");
+	commentatorBox.innerHTML="";
+	for(name of names){
+		var innerDiv = document.createElement('div');
+		innerDiv.className = 'child';
+		innerDiv.innerHTML = name;
+		innerDiv.style="font-size:" + fontsize.toString() + "px;"
+		commentatorBox.appendChild(innerDiv);
+	}
+}	
+
+
+function setRunners(){
+	var runner_data = JSON.parse('{{ runnerdata | tojson | safe }}');
+
+	// Accessing individual elements
+	var runnernames = runner_data.runnernames;
+	var flags = runner_data.flags;
+	for (var i = 0; i < Math.min(3, runnernames.length); i++) {
+		var fieldName = 'name' + (i + 1);
+		document.getElementById(fieldName).innerHTML = runnernames[i] + '&nbsp<img src="' + flags[i] + '" alt="Flag" style="width: 64px;">'
+	}
+}
+
+function setCarousel(runnerHTML, carouselItemsHTML){	
+    let index = getActiveCarouselIndex()
+    if (index === -1 || index > 6){
+        index = 0
+    }
+    document.getElementById("carouselExampleSlidesOnly").innerHTML = '<div class="carousel-inner" id="carousel-inner"> </div>'    
+    document.getElementById("carousel-inner").innerHTML = carouselItemsHTML;   
+	document.getElementById("carouselExampleSlidesOnly").innerHTML += runnerHTML;
+    document.getElementById('0').classList.remove('active') 
+    document.getElementById('' + index).classList.add('active') 
+
+    if(index >= 1 && index <= 6){
+        fixateRunners();
+    }
+
+
+}
+
+
+function updateCarousel() {
+    fetch('/recheck_data_new?spreadsheet_id=' + encodeURIComponent(s_id))
+        .then(response => response.json())
+        .then(data => {             
+            if(!arraysMatch(data.carousel_runners,carouselRunnersHTML) || !arraysMatch(data.carousel_items,carouselItemsHTML)){
+                carouselRunnersHTML = data.carousel_runners;
+                carouselItemsHTML = data.carousel_items;
+                setCarousel(carouselRunnersHTML, carouselItemsHTML);
+            }
+            setTimeout(carouselOverlayVisibility, 2000);
+        })
+        .catch(error => {
+            console.error("Error fetching modification time:", error);
+        });
+}
+
+function getActiveCarouselIndex() {
+    // Get the carousel-inner element
+    const carouselInner = document.getElementById('carousel-inner');
+    
+    // Get all carousel items within the carousel-inner element
+    const items = carouselInner.getElementsByClassName('carousel-item');
+    
+    // Loop through the items to find the one with the 'active' class
+    for (let i = 0; i < items.length; i++) {
+        if (items[i].classList.contains('active')) {
+            return i; // Return the index of the active item
+        }
+    }
+    
+    // If no active item is found, return -1
+    return -1;
+}
+
+function fixateRunners() {
+    const overlayItems = document.querySelectorAll('.carousel-overlay-item');
+    overlayItems.forEach(item => {
+        item.classList.remove('invisible');
+    });    
+    const carouseLRunners = document.querySelectorAll('.carousel-runner');
+    carouseLRunners.forEach(item => {
+        item.classList.add('invisible');
+    });   
+}
+
+function releaseRunners() {
+    const overlayItems = document.querySelectorAll('.carousel-overlay-item');
+    overlayItems.forEach(item => {
+        item.classList.add('invisible');
+    });
+    const carouseLRunners = document.querySelectorAll('.carousel-runner');
+    carouseLRunners.forEach(item => {
+        item.classList.remove('invisible');
+    });  
+}
+
+function carouselOverlayVisibility(){
+    activeIndex = getActiveCarouselIndex();
+    //find out current active index, if it is 1 or 6, then set the overlay to visible/invisible
+    //console.log(activeIndex)
+    if (activeIndex == 1){
+        fixateRunners();
+        removeFunFact();
+    }
+    if (activeIndex == 6){
+        releaseRunners();
+        //1 in 4 chance to attach a fun fact
+        let randomNumber = Math.random() * 4;
+        randomNumber = Math.floor(randomNumber) + 1;
+        if (randomNumber === 1){
+            attachFunFact();
+        }        
+    }
+
+}
+
+function attachFunFact(){   
+    //console.log("attach Fun Fact")
+    let funFactsString = '{{ fun_facts | tojson | safe }}';       
+    funFactsString = funFactsString.substring(1, funFactsString.length - 1);
+    // Split the string into an array
+    let funFacts = funFactsString.split('", "');
+
+    const randomFunFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+    document.getElementById("carousel-inner").innerHTML += randomFunFact;
+
+}
+function removeFunFact(){    
+    //console.log("funFact remove attempt")
+    const funFactItems = document.querySelectorAll('.funFact');
+
+    // Loop through each funFact item and remove it
+    funFactItems.forEach(item => {
+        item.parentNode.removeChild(item);
+    });
+}
+
+function activateOverlay(index, final_times, results, colors){
+    let overlay = document.getElementsByClassName('overlay-p' + (index+1))[0];
+    let overlay_text = document.getElementById('overlay-p' + (index+1));
+    
+    overlay.classList.remove('invisible');
+    overlay_text.innerHTML = final_times[index] + '<br>' + results[index]
+    overlay_text.style.color = colors[index]
+}
+
+
+function updateOverlays(){
+    fetch('/check_final?spreadsheet_id=' + encodeURIComponent(s_id))
+        .then(response => response.json())
+        .then(data => {   
+            let final_times = data.final_times;
+            let results = data.results;
+            let colors = data.text_colors;   
+            
+            final_times.forEach((item,index) => {
+                if (item != '27:46:40'){
+                    setTimeout(() => {
+                        activateOverlay(index, final_times, results, colors);
+                    }, 30000);
+                }
+                else{
+                    let overlay = document.getElementsByClassName('overlay-p' + (index+1))[0];
+                    overlay.classList.add('invisible');
+                }
+            })
+            
+        })
+        .catch(error => {
+            console.error("Error fetching modification time:", error);
+        });
+}
+
+
+setCommentators([]);
+setRunners();
+setTimeout(() => {
+    setInterval(updateCarousel, 12000);
+}, 2000);
+ //this needs to be synced to the carousel
+setInterval(updateOverlays, 15000);
+updateOverlays();
+
+
+
+</script>
+
+<script>
+    /*
+    var timer = 0;
+    var startDate = null;
+    var actualEnd = null;
+    
+    $( document ).ready(function() {
+        setInterval(function() {
+            $.ajax({
+                url: 'http://10.10.0.221:28010/event?host={{ automarathon_host }}', 
+                type: 'GET',
+                headers: {'Access-Control-Allow-Origin':'*'}, // <-------- set this
+                dataType: 'text', // // <-------- use JSONP
+                success: function(data){
+                    data = JSON.parse(data);
+                    console.log(data)
+
+                    if (data.hasOwnProperty('start_time')) {
+		    var startTime = data['start_time']
+                    if (startTime == null) {
+                        startDate = null
+                    } else {
+                        startDate = new Date(startTime)
+                    }
+                    }
+
+                    if(data.hasOwnProperty('end_time')){
+                        actualEnd =  data['end_time'] != null ? new Date(data['end_time']) : null;
+                    }
+
+
+                    if (startDate == null) {
+                    document.getElementById("main_timer").innerHTML = toTime(0);
+                    } else {
+                    var endDate = actualEnd == null ? new Date() : actualEnd;
+                    var timer = (endDate.getTime() - startDate.getTime());
+                    document.getElementById("main_timer").innerHTML = toTime(timer);
+                    }
+                }
+            });
+        }, 1000);
+    });
+    
+    $( document ).ready(function() {
+        setInterval(function() {
+            $.ajax({
+    		url: 'http://10.10.0.221:28010/commentators?host={{ automarathon_host }}', 
+                type: 'GET',
+                headers: {'Access-Control-Allow-Origin':'*'}, // <-------- set this
+                dataType: 'text', // // <-------- use JSONP
+                success: function(data){
+                    data = JSON.parse(data);
+    		    setCommentators(data);
+                }
+            });
+        }, 1000);
+    });
+
+    function timer() {
+    }
+    setInterval(timer, 500);
+    */
+</script>
+
+</html>

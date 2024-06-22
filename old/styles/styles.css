@@ -10,6 +10,29 @@
     src: url('fonts/Rubik-Medium.ttf') format('truetype');
 }
 
+.intro{	
+	background-image: url('images/Ladder_League_StartingSoon.jpg');
+	width: 1920px;
+	height: 1080px;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	position:absolute;
+	left:0px;
+	top:0px;	
+}
+
+.layout {
+	background-image: url('images/Ladder_League_3Person.png');
+	width: 1920px;
+	height: 1080px;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	position:absolute;
+	left:0px;
+	top:0px;
+}
+
+
 
 .runnername {
     position: absolute;
@@ -46,29 +69,6 @@
 	height: 66px;
 }
 
-
-
-.layout {
-	background-image: url('images/Ladder_League_3Person.png');
-	width: 1920px;
-	height: 1080px;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	position:absolute;
-	left:0px;
-	top:0px;
-}
-
-.opener{	
-	background-image: url('images/Ladder_League_StartingSoon.jpg');
-	width: 1920px;
-	height: 1080px;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	position:absolute;
-	left:0px;
-	top:0px;	
-}
 
 
 .summary{	

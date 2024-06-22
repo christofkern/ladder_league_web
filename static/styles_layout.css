@@ -1,0 +1,29 @@
+
+@font-face{
+    font-family:'Rubik-Bold';
+    src: url('fonts/Rubik-Bold.ttf') format('truetype');
+}
+
+
+@font-face{
+    font-family:'Rubik-Medium';
+    src: url('fonts/Rubik-Medium.ttf') format('truetype');
+}
+
+
+.runnername {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; /* Horizontally center items */
+    text-align: center;
+    line-height: 66px;
+    font-family: 'Rubik-Bold';
+    color: #cacacb;
+    font-size: 40px;
+	z-index: 2;
+}
+.runnerflag {
+    vertical-align: top; /* or 'top' depending on your preference */
+}

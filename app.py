@@ -12,11 +12,15 @@ from get_golds import get_golds
 app = Flask(__name__, static_folder='static')
 localOverrides = {}
 
+@app.route('/fonts/<path:filename>')
+def custom_font_route(filename):
+    return send_from_directory('static/fonts', filename, mimetype='font/ttf')
+
 #these are the pages that can be rendered
 @app.route('/intro')
 def intro():
     spreadsheet_id = request.args.get('spreadsheet_id')
-    return render_template('intro.html')
+    return render_template('intro.html', spreadsheet_id = spreadsheet_id)
 
 @app.route('/layout')
 def layout_2P():
@@ -76,7 +80,7 @@ def static_info():
     
     racename = localRunnerData.race_name
     runners = [runner_name for runner_name in localRunnerData.runner_names]
-    country_urls = [get_country_flag_url(country) for country in localRunnerData.runner_countries]
+    country_urls = [country for country in localRunnerData.runner_countries]
     
     if (checkFile and spreadsheet_valid):
         #only override what is on default value
@@ -86,7 +90,7 @@ def static_info():
         for i in range(3):
             if (runners[i] == ""):
                 runners[i] = f"({runners_values[i][1]}) {runners_values[i][0]}" 
-            if (country_urls[i] == ""):
+            if (country_urls[i] == ""):                
                 country_urls[i] = get_country_flag_url(runners_values[i][23])
     else:
         print("Not checking file")    
@@ -145,9 +149,7 @@ def runner_positions():
 
     #reuse get delta times, as this sorts the runner array by who is in the lead
     xd, sorted_runners_rungg = get_delta_times(race_id, runner_golds, runner_runggs)
-    #sort runners
-    print(xd)
-    print(sorted_runners_rungg)
+    #sort runners   
     if spreadsheet_valid:
         runner_order = {runner[4].upper(): (idx+1) for idx,runner in enumerate(runners_values)}
     else:
@@ -155,7 +157,8 @@ def runner_positions():
     race_order = [runner_order[runner_id.upper()] for runner_id in sorted_runners_rungg]
     return jsonify({'runner_positions':race_order})
         
-        
+
+
     
     
     
@@ -212,7 +215,7 @@ def override_info():
     if args['names']:
         localOverrides[spreadsheet_id].runner_names = args['names'].split(',')
     if args['countries']:
-        localOverrides[spreadsheet_id].runner_countries = args['countries'].split(',')
+        localOverrides[spreadsheet_id].runner_countries = [get_country_flag_url(country) if country else country for country in args['countries'].split(',')]
     if args['runggs']:
         localOverrides[spreadsheet_id].runner_runggs = args['runggs'].split(',')
     if args['golds']:
