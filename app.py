@@ -10,6 +10,7 @@ from local_overrides import LocalRunnerData
 app = Flask(__name__, static_folder='static')
 
 
+
 #these are the pages that can be rendered
 @app.route('/intro')
 def intro():
@@ -96,6 +97,8 @@ def runner_positions():
 # - runner improvement since seeding
 # - runner pbs
 
+
+
 #list of overrides
 # - race name
 # - runner names
@@ -107,6 +110,47 @@ def runner_positions():
 # - runner improvement (same as above)
 # - toggle using therun, this would only show racename, sobs, pbs and improvement then
 
+localOverrides = {}
+@app.route('/override')
+def override_info():    
+    spreadsheet_id = request.args.get('spreadsheet_id')
+
+    #try to get all request args: possible are race_name, names, countries, runggs, golds, sobs, pbs, improvements, override_therun
+    possible_args = [
+        'race_name', 'names', 'countries', 'runggs', 
+        'golds', 'sobs', 'pbs', 'improvements', 'override_therun'
+    ]
+    
+    # Initialize a dictionary to store the request arguments
+    args = {arg: request.args.get(arg, '') for arg in possible_args}
+    
+    if (spreadsheet_id not in localOverrides):
+        localOverrides[spreadsheet_id] = LocalRunnerData()
+        
+    # Convert the dictionary values to individual variables (strings)
+    if args['race_name']:
+        localOverrides[spreadsheet_id].race_name = args['race_name']
+    if args['names']:
+        localOverrides[spreadsheet_id].runner_names = args['names'].split(',')
+    if args['countries']:
+        localOverrides[spreadsheet_id].runner_countries = args['countries'].split(',')
+    if args['runggs']:
+        localOverrides[spreadsheet_id].runner_runggs = args['runggs'].split(',')
+    if args['golds']:
+        localOverrides[spreadsheet_id].override_runner_gold_times = args['golds'].split(',')
+    if args['sobs']:
+        localOverrides[spreadsheet_id].override_runner_sobs = args['sobs'].split(',')
+    if args['pbs']:
+        localOverrides[spreadsheet_id].override_runner_pbs = args['pbs'].split(',')
+    if args['improvements']:
+        localOverrides[spreadsheet_id].override_runner_improvements_since_seeding = args['improvements'].split(',')
+    if args['override_therun']:
+        localOverrides[spreadsheet_id].override_therun = args['override_therun'].split(',')
+
+    #for id in localOverrides:
+    #    print(localOverrides[id].override_runner_sobs)
+
+    return render_template('success.html', message='The overrides have been executed')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=35065, debug=True)
