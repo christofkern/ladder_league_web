@@ -6,11 +6,11 @@ class LocalRunnerData:
         self.runner_names = ["", "", ""]
         self.runner_countries = ["", "", ""]
         self.runner_runggs = ["", "", ""]
-        self.runner_gold_times = '[[], [], []]'
+        self.runner_gold_times = ["", "", ""]
         self.runner_sobs = ["", "", ""]
         self.runner_pbs = ["", "", ""]
         self.runner_improvements_since_seeding = ["", "", ""]
-        self.therun = False
+        self.override_therun = False
         self.runner_final_times = ["", "", ""]
 
     def everything_static_overriden(self):

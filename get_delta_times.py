@@ -62,7 +62,10 @@ def get_delta_times(race_id, golds, runners, interval = False):
 
 
     for idx,runner in enumerate(runner_splits):
+        runner_golds = golds[idx]
+        print(runner_golds)
         if (runner != fastest_runner):
+            
             splitset = runner_splits[runner]
             if (len(splitset) == most_splits):#on the same split, calculate delta between times
                 delta = splitset[0][1] - fastest_splittime
@@ -71,18 +74,20 @@ def get_delta_times(race_id, golds, runners, interval = False):
                 #print("Passing")
                 continue
             else: #use golds for the missing levels and add that to the last existing time
-                runner_golds = golds[idx]
-                if (len(runner_golds)==0):                    
+                if (len(golds[idx]) == 0):
                     continue
-                delta = splitset[0][1] - fastest_splittime
+                runner_golds = golds[idx][1:-1].split(',')
+                if (len(runner_golds)==0):
+                    continue
+                delta = splitset[0][1] - fastest_splittime                
                 
                 for i in range (most_splits - len(splitset)):
                     
                    # print(f"adding gold: {runner_golds[most_splits - i - 2]}")
                     
                     if (len(runner_golds) > most_splits - i - 3):
-                        print(runner_golds[most_splits - i - 2])
-                        delta = delta + parse_time_to_milliseconds(runner_golds[most_splits - i - 2])
+                        print(f"adding gold: {runner_golds[most_splits - i - 2]}")
+                        delta = delta + parse_time_to_milliseconds(runner_golds[most_splits - i - 2][2:-1])
                     
                 if (delta < 0):
                     delta = format_delta(1000)

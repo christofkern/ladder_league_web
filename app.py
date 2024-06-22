@@ -113,7 +113,7 @@ def runner_positions():
 
     localRunnerData = localOverrides[spreadsheet_id]
     #if therun is disabled, order the runners how they are in the spreadsheet/local override class
-    if (localRunnerData.therun):
+    if (localRunnerData.override_therun):
         return jsonify({'runner_positions':[1,2,3]})
     #if therun is enabled, get the order from the race
 
@@ -130,9 +130,8 @@ def runner_positions():
     if spreadsheet_valid:  
         golds = get_golds(spreadsheet_id)
         for i in range(3):
-            if (runner_golds[i] == []):
+            if (runner_golds[i] == ""):
                 runner_golds[i] = golds[i]
-
     #get runners therungg
     runner_runggs = localRunnerData.runner_runggs
     if not spreadsheet_valid and "" in runner_runggs:
@@ -217,13 +216,14 @@ def override_info():
     if args['runggs']:
         localOverrides[spreadsheet_id].runner_runggs = args['runggs'].split(',')
     if args['golds']:
-        localOverrides[spreadsheet_id].override_runner_gold_times = args['golds'].split(',')
+        localOverrides[spreadsheet_id].runner_gold_times = args['golds'].split(';')
+        print(localOverrides[spreadsheet_id].runner_gold_times)
     if args['sobs']:
-        localOverrides[spreadsheet_id].override_runner_sobs = args['sobs'].split(',')
+        localOverrides[spreadsheet_id].runner_sobs = args['sobs'].split(',')
     if args['pbs']:
-        localOverrides[spreadsheet_id].override_runner_pbs = args['pbs'].split(',')
+        localOverrides[spreadsheet_id].runner_pbs = args['pbs'].split(',')
     if args['improvements']:
-        localOverrides[spreadsheet_id].override_runner_improvements_since_seeding = args['improvements'].split(',')
+        localOverrides[spreadsheet_id].runner_improvements_since_seeding = args['improvements'].split(',')
     if args['override_therun']:
         localOverrides[spreadsheet_id].override_therun = args['override_therun'].split(',')
     if args['final_times']:
