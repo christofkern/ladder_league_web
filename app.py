@@ -242,27 +242,26 @@ def post_race_info():
     
     final_time_icon = "https://drive.google.com/thumbnail?id=15ubkMalyP-rHUkO4NVe14sTrip34-jO3"
     if (final_time != 1e8):
-        position = get_position(race_id, final_time)        
-        if (isQualifier and (position == 1 or (position == 2 and len(runners_values) == 3))):
-            final_time_icon = "https://drive.google.com/thumbnail?id=16-lBbCrLgAG5u3L5f2mRESTu6ONzMy6A"
-        elif (isQualifier):
-            if (len(runners_values) == 2):
+        position = get_position(race_id, final_time)
+        if (position != 0):
+            # Consider doing pending when not everyone is finished??
+            if (isQualifier and (position == 1 or (position == 2 and len(runners_values) == 3))):
+                final_time_icon = "https://drive.google.com/thumbnail?id=16-lBbCrLgAG5u3L5f2mRESTu6ONzMy6A"
+            elif (isQualifier):
+                if (len(runners_values) == 2):
+                    final_time_icon = "https://drive.google.com/thumbnail?id=15yd1Sae7tB9OZLQgHMU56ROl2ZQCYnvb"
+                else:
+                    final_time_icon = "https://drive.google.com/thumbnail?id=16-wst51zvLrZ-hpxyeD68qRsfABBtB_y"
+            elif (isTopRung and position == 1):
+                final_time_icon = "https://drive.google.com/thumbnail?id=16-lBbCrLgAG5u3L5f2mRESTu6ONzMy6A"
+            elif (isTopRung and not isBottomRung and position == 2):
                 final_time_icon = "https://drive.google.com/thumbnail?id=15yd1Sae7tB9OZLQgHMU56ROl2ZQCYnvb"
-            else:
-                final_time_icon = "https://drive.google.com/thumbnail?id=16-wst51zvLrZ-hpxyeD68qRsfABBtB_y"
-        elif (isTopRung and position == 1):
-            final_time_icon = "https://drive.google.com/thumbnail?id=16-lBbCrLgAG5u3L5f2mRESTu6ONzMy6A"
-        elif (isTopRung and not isBottomRung and position == 2):
-            final_time_icon = "https://drive.google.com/thumbnail?id=15yd1Sae7tB9OZLQgHMU56ROl2ZQCYnvb"
-        elif (not isTopRung and (position == 1 or position == 2)):
-            if (position == 1):
+            elif (not isTopRung and (position == 1 or (position == 2 and not isBottomRung))):
                 final_time_icon = "https://drive.google.com/thumbnail?id=165dA-f7dY1vpYU0Nwpxu9qh7H_fUN9u-"
+            elif (isBottomRung):
+                final_time_icon = "https://drive.google.com/thumbnail?id=16-wst51zvLrZ-hpxyeD68qRsfABBtB_y"
             else:
-                final_time_icon = "https://drive.google.com/thumbnail?id=165dA-f7dY1vpYU0Nwpxu9qh7H_fUN9u-"#"https://drive.google.com/thumbnail?id=164hSZlm6bK9XAtdfFRSXEJorT_O6a1o-"      
-        elif (isBottomRung):
-            final_time_icon = "https://drive.google.com/thumbnail?id=16-wst51zvLrZ-hpxyeD68qRsfABBtB_y"     
-        else:
-            final_time_icon = "https://drive.google.com/thumbnail?id=161VlRHWSVv8bzjS9h40PaymYHiZ4fqPG"
+                final_time_icon = "https://drive.google.com/thumbnail?id=161VlRHWSVv8bzjS9h40PaymYHiZ4fqPG"
 
     
         record = runners_values[int(runner)][20]
