@@ -20,9 +20,9 @@
         <p id="name2" class="text-center align-self-center raceparticipants"></p>
         </div>
         <div class="row">
-        <p class="text-center align-self-center raceparticipants">&nbsp;&nbsp;vs.</p>
+        <p id="vs2" class="text-center align-self-center raceparticipants">&nbsp;&nbsp;vs.</p>
         </div>
-        <div class="row">
+        <div class="row 3ponly">
         <p  id="name3" class="text-center align-self-center raceparticipants"></p>
         </div>
     </div>
@@ -31,54 +31,52 @@
 
 <script>
 
-let s_id = "{{spreadsheet_id}}";
+    let s_id = "{{spreadsheet_id}}";
 
-function setRunners(){
-	console.log(s_id)
-    fetch('/static_info?spreadsheet_id=' + encodeURIComponent(s_id))
-        .then(response => response.json())
-            .then(data => {      
-                //check if there is an entry error, if not extract the entries 'racename', 'runners', 'country_urls'. The both last are arrys in python
-                if (data.error) {
-                    console.error("Error in data:", data.error);
-                } else {
-                    const racename = data[0].racename;
-                    const runners = data[1].runners;
-                    const country_urls = data[2].country_urls;
+    function setTitleAndRunners(){
+        console.log(s_id)
+        fetch('/static_info?spreadsheet_id=' + encodeURIComponent(s_id))
+            .then(response => response.json())
+                .then(data => {      
+                    //check if there is an entry error, if not extract the entries 'racename', 'runners', 'country_urls'. The both last are arrys in python
+                    if (data.error) {
+                        console.error("Error in data:", data.error);
+                    } else {
+                        const racename = data[0].racename;
+                        const runners = data[1].runners;
+                        const country_urls = data[2].country_urls;
 
-                    console.log("Race Name:", racename);
-                    console.log("Runners:", runners);
-                    console.log("Country URLs:", country_urls);
+                        document.getElementById("racename").innerHTML = racename
 
-                    document.getElementById("racename").innerHTML = racename
+                        for (var i = 0; i < Math.min(3, runners.length); i++) {
+                            var fieldName = 'name' + (i + 1);
+                            document.getElementById(fieldName).innerHTML = runners[i] + '&nbsp<img src="' + country_urls[i] + '" style="width: 64px; margin-top:-11px">'
+                        }
 
-                    for (var i = 0; i < Math.min(3, runners.length); i++) {
-                    	var fieldName = 'name' + (i + 1);
-                    	document.getElementById(fieldName).innerHTML = runners[i] + '&nbsp<img src="' + country_urls[i] + '" style="width: 64px; margin-top:-11px">'
+                        
+                        if (runners.length < 3){
+                            //make third runner invisible
+                            document.getElementById("name3").classList.add("invisible");
+                            document.getElementById("vs2").classList.add("invisible");
+                        
+                            //center text
+                            var inner = document.getElementById("info_container").innerHTML;
+                            document.getElementById("info_container").innerHTML = '<div class="row"><p class="text-center align-self-center raceparticipants">&nbsp;&nbsp;</p></div>' + inner;
+                        }
+                                               
+                        
+
+
+                        document.getElementById("info_container").classList.remove('invisible') 
+
                     }
+                })
+        .catch(error => {
+            console.error("Error fetching static info", error);
+        });
+    }
 
-                    document.getElementById("info_container").classList.remove('invisible') 
-
-                }
-            })
-    .catch(error => {
-        console.error("Error fetching static info", error);
-    });
-
-
-
-
-
-	// Accessing individual elements
-	//var runnernames = runner_data.runnernames;
-	//var flags = runner_data.flags;
-	//for (var i = 0; i < Math.min(3, runnernames.length); i++) {
-	//	var fieldName = 'name' + (i + 1);
-	//	document.getElementById(fieldName).innerHTML = runnernames[i] + '&nbsp<img src="' + flags[i] + '" style="width: 64px; margin-top:-11px">'
-	//}
-}
-
-setRunners();
+    setTitleAndRunners();
 </script>
 
 </html>
