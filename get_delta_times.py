@@ -12,7 +12,7 @@ def delta_sort(item):
 
 
 
-def get_delta_times(race_id, golds, runners, interval = False):
+def get_delta_times(race_id, golds, runners, interval = False, sort = True):
     #print(runners)
 
     deltas = [(runners[0],'-'),(runners[1],'-'),(runners[2],'-')]
@@ -95,7 +95,8 @@ def get_delta_times(race_id, golds, runners, interval = False):
 
     #print(deltas)
     #sort by deltas
-    deltas = sorted(deltas, key=delta_sort)
+    if (sort):
+        deltas = sorted(deltas, key=delta_sort)
     if (interval):
         deltas[0] = (runner,"INTERVAL")
         if (deltas[2][1] != '-'):

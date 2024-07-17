@@ -1,0 +1,218 @@
+
+@font-face{
+    font-family:'Rubik-Bold';
+    src: url('fonts/Rubik-Bold.ttf') format('truetype');
+}
+
+
+@font-face{
+    font-family:'Rubik-Medium';
+    src: url('fonts/Rubik-Medium.ttf') format('truetype');
+}
+
+.layout2P {
+	background-image: url('images/Ladder_League_2Person.png');
+	width: 1920px;
+	height: 1080px;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	position:absolute;
+	left:0px;
+	top:0px;
+}
+
+.runnername {
+    position: absolute;
+    display: flex;
+    flex-direction: row;  
+    line-height: 66px;
+    font-family: 'Rubik-Bold';
+    color: #cacacb;
+    font-size: 40px;
+	z-index: 2;
+}
+.runnerflag {
+    vertical-align: top; /* or 'top' depending on your preference */
+}
+
+#name1 {	
+	left: 32px;
+	top: 535px;
+	width: 500px;
+	height: 66px;	
+}
+#name2 {	
+	left: 1000px;
+	top: 535px;
+	width: 500px;
+	height: 66px;
+}
+
+.delta {
+    position: absolute;
+    display: flex;
+    flex-direction: row;  
+    justify-content: end;
+    line-height: 66px;
+    font-family: 'Rubik-Bold';
+    color: #cacacb;
+    font-size: 40px;
+	z-index: 2;
+}
+
+#delta1 {	
+	left: 619px;
+	top: 535px;
+	width: 300px;
+	height: 66px;	
+}
+#delta2 {	
+	left: 1587px;
+	top: 535px;
+	width: 300px;
+	height: 66px;
+}
+
+.timer {
+	position: absolute;
+	width: 301px;
+	height: 109px;
+	left: 1420px;
+	top: 580px;
+	text-align: center;
+	line-height: 109px;
+	color:#cacacb;
+	font-size: 60px;
+	font-family: 'Rubik-Bold';
+}
+
+.commentators {
+	position: absolute;
+		left: 1100px;
+	top: 580px;
+	width: 234px;
+	height: 233px;
+
+	font-family: 'Rubik-Bold';
+	color:#cacacb;
+	display:flex;
+	align-items: center;
+  	display : flex;
+  	align-items : center;
+}
+
+
+.statistics {
+	display: flex;
+	position: absolute;
+	width: 792px;
+	height: 276px;
+	left: 1033px;
+	top: 697px;
+	font-family: 'Rubik-Bold';
+}
+
+.carousel {
+	color:#cacacb;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	z-index: 999;
+	text-align: center;	
+  }
+  .carousel-overlay {
+	color:#cacacb;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	z-index: 999;
+	text-align: center;	
+  }
+  .carousel-item {
+    align-items: center;
+    justify-content: center;
+    height: 276px; /* Ensures a consistent height for all carousel items */
+    text-align: center;
+    transition-duration: 2s;
+}
+.container{
+	text-align: center;
+    justify-content: center;
+    align-items: center;
+	color:#cacacb;
+}
+
+.carousel-racename{
+	font-size: 52px;
+    margin-top: 25px;
+}
+.carousel-header{
+	font-size: 40px;
+    margin-top: 20px;
+}
+.carousel-header-llstats{
+	font-size: 40px;
+    margin-top: 0px;
+}
+.carousel-commands{
+	font-size: 28px;
+}
+.carousel-rows{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-items{
+    justify-content: center;
+}
+
+.carousel-runner{
+    margin-top: 20px;
+    
+}
+.carousel-info{
+    font-size: 32px;
+    text-align: center;
+}
+
+.carousel-llstats{
+    margin-top: "0px";
+    font-size: 32px;
+    text-align: center;
+}
+
+
+
+.overlay-p1 {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    width: 952px;
+    height: 531px;
+    background-color: rgba(0, 0, 0, 0.95);
+}
+.overlay-p2 {
+    position: absolute;
+    top: 1px;
+    left: 968px;
+    width: 952px;
+    height: 531px;
+    background-color: rgba(0, 0, 0, 0.95); 
+}
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+	font-family: 'Rubik-Bold';
+	font-size: 54px;
+}

@@ -1,13 +1,6 @@
+
 import requests
 from get_final_time import format_milliseconds
-
-def isEmpty(dictionary):
-    for element in dictionary:
-        if element:
-            return True
-        return False
-
-
 
 def get_runner_sob(runner):
     response = requests.get(f"https://therun.gg/api/users/{runner}/")
@@ -41,28 +34,3 @@ def get_runner_sob(runner):
             if (float(sob) < float(sw_sob) and float(sob)>7200000):
                 sw_sob = float(sob)    
     return format_milliseconds(sw_sob)
-
-
-def get_runner_bpt(race_id, rungg):
-    response = requests.get(f"https://races.therun.gg/{race_id}")
-    if response.status_code == 500:
-        return "--:--:--"
-    data = response.json()
-    result = data["result"]
-    participants = result["participants"]
-    for participant in participants:
-        if (participant["user"].lower() == rungg.lower()):
-            if ("liveData" in participant):
-                liveData = participant["liveData"]
-                if ("bestPossibleTime" in liveData):
-                    bpt = liveData["bestPossibleTime"]
-                    if (bpt is not None):
-                        return format_milliseconds(bpt)
-    return "--:--:--"
-    
-
-if __name__ == '__main__':
-    # Initialize the argument parser    
-    
-    # Call the function with the provided argument
-    print(get_runner_sob("jablaky"))
