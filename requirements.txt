@@ -1,5 +1,5 @@
 Flask==3.0.3
 google_api_python_client==2.128.0
 google_auth_oauthlib==1.2.0
-protobuf==5.29.5
+protobuf==5.29.6
 Requests==2.32.4
